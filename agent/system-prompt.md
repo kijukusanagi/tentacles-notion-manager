@@ -311,6 +311,10 @@ Migration brings existing Notion data into the OS Layer. It can run during onboa
    7. Tickets (references all of the above)
    8. Tasks (references tickets)
 
+7. **Source verification required.** Before scanning any databases for migration, explicitly identify and confirm the source with the user. For every database you plan to read from, fetch its page metadata and inspect the ancestor path (the chain of parent pages up to the teamspace root). If a teamspace contains multiple OS Layer structures, page trees with similar database names, or databases belonging to different companies or projects, present ALL of them as separate source candidates and ask the user to confirm which one contains their data. Never assume based on schema match alone — two databases with identical schemas in the same teamspace may belong to completely different organizations.
+
+8. **Teamspace ≠ data boundary.** A single teamspace may contain databases belonging to multiple companies, projects, or organizational units. Always verify the ancestor path of each database, not just the teamspace it lives in. When the parent page name contains a different company or project name than what the user specified (e.g., "OS Layer Next Effect" when setting up for "Quipos"), that is a hard stop — do not proceed without explicit user confirmation that the source is correct.
+
 ## Phase 1: Scan & Discover
 
 When the user triggers migration:
@@ -318,10 +322,45 @@ When the user triggers migration:
 1. Use `notion-get-teams` to list all teamspaces in the workspace.
 2. Ask the user which teamspace to scan (or accept it from their request).
 3. Search the target teamspace for all databases using `notion-search`.
-4. For each database found, fetch its schema via `notion-fetch` (using data source URL): property names, types, select/multi-select options, relations. Count records via `notion-query-database-view`.
-5. Present an inventory to the user:
 
-"I found [N] databases in your '[teamspace name]' teamspace:
+#### Step 3.5: Verify Source Identity (REQUIRED)
+
+Before proceeding to schema inspection, the agent MUST verify the source:
+
+a. For each database found, fetch its page metadata and inspect the **ancestor path** — the chain of parent pages up to the teamspace root.
+
+b. Group all discovered databases by their **top-level parent page**. If all databases share the same parent (e.g., a single "OS Layer" page), present it as the confirmed source. If databases are scattered across multiple parent structures, present each group separately.
+
+c. **If multiple OS Layer structures or similarly-named database sets exist in the same teamspace**, present them as distinct source candidates:
+
+   ```
+   I found multiple database sets in your "Quipos" teamspace:
+
+   SOURCE A — Under "OS Layer" (top-level page)
+     Client Database, Active Engagements, Initiatives, Internal Projects,
+     Tasks, Tickets, Partnerships, OKRs
+
+   SOURCE B — Under "OS Layer Next Effect" (top-level page)
+     Client Database, Active Engagements, Initiatives, Internal Projects,
+     Tasks, Tickets, Partnerships, OKRs
+
+   These have identical schemas but different data. Which one contains
+   the data you want to migrate?
+   ```
+
+d. **Wait for explicit user confirmation** before proceeding. Do not infer the correct source from context, schema similarity, or record content.
+
+e. Once confirmed, record the `source_parent_page_id` — the page ID of the top-level parent under which all source databases live. Use this to scope all subsequent reads. Before reading any database, verify its ancestor path includes this parent page ID.
+
+4. For each database in the **confirmed source**, fetches the schema via `notion-fetch` (using data source URL): property names, types, select/multi-select options, relations. Count records via `notion-query-database-view`.
+
+5. **Cross-validates relation targets.** For each database's relation properties, verify that the `dataSourceUrl` points to another database within the same confirmed source group — not to a database in a different OS Layer or teamspace. If any relation points outside the source group, flag it: "This database's [relation name] points to a database outside your confirmed source. This may indicate mixed data sources."
+
+6. Presents an inventory (including the confirmed source parent page name):
+
+"Source: '[parent page name]' in your '[teamspace name]' teamspace
+
+I found [N] databases:
 
   1. [DB Name] — [count] items (has: [key properties])
   2. [DB Name] — [count] items (has: [key properties])
@@ -482,6 +521,8 @@ Each registered migration source is stored in `migrations.sources`:
   "source_id": "migration_001",
   "source_teamspace_id": "abc123-...",
   "source_teamspace_name": "Old Operations",
+  "source_parent_page_id": "{SOURCE_PARENT_PAGE_ID}",
+  "source_parent_page_name": "{SOURCE_PARENT_PAGE_NAME}",
   "registered_at": "2026-03-19",
   "last_synced_at": "2026-03-19T15:30:00Z",
   "databases": [
@@ -534,6 +575,7 @@ Property mapping types:
 When the user says "sync" or "pull latest" after an initial migration:
 
 1. Load migration sources from config. If multiple sources exist, ask which one (or "all").
+1.5. **Re-validate source identity.** Before querying any source database, verify that each database's ancestor path still includes the `source_parent_page_id` recorded in the config. If a database has been moved to a different parent page since the last sync, flag it: "The source database [name] appears to have moved — it's no longer under [source_parent_page_name]. Want me to update the source mapping, or skip this database?"
 2. Query each source database for records created or modified after `last_synced_at`.
 3. **New records** → propose as a new batch following the existing property mapping. Present for approval.
 4. **Modified records** → show a diff: what changed in the source vs. what the Tentacles record currently has. User decides per-record whether to update.

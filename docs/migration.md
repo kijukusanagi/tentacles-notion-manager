@@ -20,6 +20,8 @@ This is not a background sync. It's agent-driven migration: the user asks, the a
 
 5. **Idempotent.** The agent tracks what's been migrated. Running migration again skips already-imported records and only picks up new ones. No duplicates.
 
+6. **Source identity verified.** The agent never assumes which databases to migrate from based on schema match alone. A teamspace may contain multiple parallel database structures (e.g., for different companies sharing a workspace). The agent presents all candidate source groups to the user, gets explicit confirmation, and records the verified source parent page ID in the migration config. Every database read during migration is validated against this confirmed source.
+
 ---
 
 ## How It Works
@@ -40,19 +42,49 @@ The agent:
 1. Uses `notion-get-teams` to list all teamspaces in the workspace.
 2. Asks the user which teamspace to scan (or accepts it from their request).
 3. Searches the target teamspace for all databases.
-4. For each database found, fetches the schema: property names, types, select/multi-select options, relations.
-5. Presents an inventory:
+
+#### Step 3.5: Verify Source Identity (REQUIRED)
+
+Before proceeding to schema inspection, the agent MUST verify the source:
+
+a. For each database found, fetch its page metadata and inspect the **ancestor path** — the chain of parent pages up to the teamspace root.
+
+b. Group all discovered databases by their **top-level parent page**. If all databases share the same parent (e.g., a single "OS Layer" page), present it as the confirmed source. If databases are scattered across multiple parent structures, present each group separately.
+
+c. **If multiple OS Layer structures or similarly-named database sets exist in the same teamspace**, present them as distinct source candidates:
+
+   ```
+   I found multiple database sets in your "Quipos" teamspace:
+
+   SOURCE A — Under "OS Layer" (top-level page)
+     Client Database, Active Engagements, Initiatives, Internal Projects,
+     Tasks, Tickets, Partnerships, OKRs
+
+   SOURCE B — Under "OS Layer Next Effect" (top-level page)
+     Client Database, Active Engagements, Initiatives, Internal Projects,
+     Tasks, Tickets, Partnerships, OKRs
+
+   These have identical schemas but different data. Which one contains
+   the data you want to migrate?
+   ```
+
+d. **Wait for explicit user confirmation** before proceeding. Do not infer the correct source from context, schema similarity, or record content.
+
+e. Once confirmed, record the `source_parent_page_id` — the page ID of the top-level parent under which all source databases live. Use this to scope all subsequent reads. Before reading any database, verify its ancestor path includes this parent page ID.
+
+4. For each database in the **confirmed source**, fetches the schema: property names, types, select/multi-select options, relations.
+
+5. **Cross-validates relation targets.** For each database's relation properties, verify that the `dataSourceUrl` points to another database within the same confirmed source group — not to a database in a different OS Layer or teamspace. If any relation points outside the source group, flag it: "This database's [relation name] points to a database outside your confirmed source. This may indicate mixed data sources."
+
+6. Presents an inventory (including the confirmed source parent page name):
 
 ```
-I found 5 databases in your "Operations" teamspace:
+Source: "OS Layer" in your "Quipos" teamspace
 
-  1. Project Tracker — 47 items (has: Name, Status, Priority, Assignee, Due Date)
-  2. Clients — 12 items (has: Name, Stage, Contact, Deal Value)
-  3. Task List — 83 items (has: Task, Status, Project, Assignee)
-  4. Meeting Notes — 31 items (has: Title, Date, Attendees)
-  5. Resources — 8 items (has: Name, URL, Category)
-
-Databases 1-3 map cleanly to Tentacles. Database 4 (Meeting Notes) doesn't have a direct match — I can bring those in as tickets if you want. Database 5 (Resources) is reference data and probably doesn't need to migrate.
+I found 8 databases:
+  1. Client Database — 3 items (has: Name, Status, Value, ...)
+  2. Active Engagements — 0 items (empty)
+  ...
 
 Want me to build a migration plan?
 ```
@@ -210,6 +242,7 @@ After an initial migration is registered, the user can say "sync" or "pull lates
 ### How It Works
 
 1. Agent reads the migration config to find registered sources.
+1.5. **Re-validate source identity.** Before querying any source database, verify that each database's ancestor path still includes the `source_parent_page_id` recorded in the config. If a database has been moved to a different parent page since the last sync, flag it: "The source database [name] appears to have moved — it's no longer under [source_parent_page_name]. Want me to update the source mapping, or skip this database?"
 2. Queries the source database for records created or modified after the last sync timestamp.
 3. For new records: runs them through the same mapping and presents a batch for approval.
 4. For modified records: presents a diff showing what changed in the source and what the corresponding Tentacles record currently looks like. User decides per-record whether to update.
@@ -242,6 +275,8 @@ The config file gets a new top-level `migrations` section:
         "source_id": "migration_001",
         "source_teamspace_id": "abc123-...",
         "source_teamspace_name": "Old Operations",
+        "source_parent_page_id": "{SOURCE_PARENT_PAGE_ID}",
+        "source_parent_page_name": "{SOURCE_PARENT_PAGE_NAME}",
         "registered_at": "2026-03-19",
         "last_synced_at": "2026-03-19T15:30:00Z",
         "databases": [
@@ -313,6 +348,8 @@ The config file gets a new top-level `migrations` section:
 |-------|---------|
 | `source_id` | Unique migration identifier (for referencing in conversation) |
 | `source_teamspace_id` | The teamspace being read from — agent uses this to scope queries |
+| `source_parent_page_id` | The verified top-level parent page containing the source databases — prevents reading from the wrong OS Layer in a shared teamspace |
+| `source_parent_page_name` | Human-readable name shown during sync confirmations for at-a-glance source verification |
 | `last_synced_at` | Timestamp of last successful sync — used for incremental queries |
 | `property_mapping` | The approved field mapping — stored so re-syncs use the same rules |
 | `migrated_record_ids` | Notion page IDs of all source records that have been imported — prevents duplicates |
@@ -525,6 +562,16 @@ Before creating any record, the agent checks if a record with the same title alr
 
 ### Schema Changes in Source
 On incremental sync, if the source database has new properties that weren't in the original mapping, the agent flags them: "The Project Tracker now has a 'Department' property that wasn't there before. Want me to add it to the mapping?"
+
+### Multiple OS Layers in Same Teamspace
+If the target teamspace contains multiple page trees with identical or similar database structures (e.g., "OS Layer" and "OS Layer Next Effect" both containing Client Database, Tasks, Tickets, etc.):
+
+1. The agent MUST present all candidate source groups with their parent page names clearly labeled.
+2. The agent MUST NOT proceed until the user explicitly confirms which source to use.
+3. The agent records the confirmed `source_parent_page_id` in the migration config.
+4. During execution, every database read is validated against this parent page ID. If a database's ancestor path doesn't include the confirmed parent, the agent stops and alerts the user rather than reading from the wrong source.
+
+This prevents the most dangerous migration error: importing an entire dataset from the wrong organization's databases when they coexist in a shared teamspace.
 
 ---
 
