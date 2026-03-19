@@ -63,9 +63,31 @@ Go to [claude.ai](https://claude.ai) → Projects → New Project. Name it whate
 - In your Claude Project, click the ⚙️ gear icon at the top-right
 - Find **Instructions** and paste the system prompt
 
-### 5. Say Hello
+### 5. Add project knowledge files
+
+This is what makes the agent fully capable. Download the following files from this repo and upload them to your Claude Project's **Files** section (⚙️ gear icon → scroll to Files → click **+**).
+
+We highly recommend adding all of these. Each one gives the agent deeper context for a specific capability — without them, the agent still works but operates with less information to draw on.
+
+| File | Repo Location | What it gives the agent |
+|------|--------------|--------------------------|
+| Agent Patterns | [`docs/agent-patterns.md`](docs/agent-patterns.md) | A library of practical workflows the agent can suggest and run — morning briefings, triage runs, weekly rollups, sprint planning, deep dives, and more. Without this, the agent won't proactively suggest workflows when they'd be useful. |
+| Config Template | [`agent/config-template.json`](agent/config-template.json) | The full schema reference for the config file the agent generates during onboarding. Includes all database schemas, enum values, relation maps, and default settings for effort tracking, alerting, capacity planning, and dives. Helps the agent produce accurate, complete configs. |
+| Migration Spec | [`docs/migration.md`](docs/migration.md) | Detailed procedures for migrating data from existing Notion teamspaces into Tentacles — schema mapping rules, batch ordering logic, enum value translation, incremental sync behavior, and edge case handling. If you plan to bring in existing data, this is essential. |
+| Architecture Doc | [`docs/architecture.md`](docs/architecture.md) | The full project plan and design rationale — how the 8 databases connect, why the system is designed the way it is, onboarding flow details, and the build roadmap. Gives the agent deeper understanding of the system's intent when making judgment calls. |
+| v1.2 Release Spec | [`docs/v1.2-release-spec.md`](docs/v1.2-release-spec.md) | Detailed feature specifications for Effort Logging (time tracking on tasks), Proactive Alerting (health checks across all databases), and Capacity Planning (workload visibility per team member). These features are summarized in the system prompt, but this file gives the agent the full design context — thresholds, query logic, output formats, and implementation details. |
+
+> **What about the config file?** You don't need to upload a config file now — the agent generates one during onboarding (Step 6) based on your actual workspace. You'll upload the generated config after onboarding is complete.
+
+### 6. Say Hello
 
 Open your Claude Project and type `hello tentacles` or `let's set up`. The agent walks you through the rest in about 5 minutes — it finds your databases, sets up your project codes, and creates your first real ticket and task.
+
+### 7. (Optional) Migrate existing data
+
+If you have existing databases in another Notion teamspace — project trackers, client lists, task boards — the agent can scan them and migrate your data into Tentacles. You can do this during onboarding when prompted, or anytime later by saying `"migrate my data from [teamspace name]"`.
+
+The agent reads from your old databases (never modifies them), maps the data to the Tentacles schema, and creates records in batches with your approval at every step.
 
 ---
 
