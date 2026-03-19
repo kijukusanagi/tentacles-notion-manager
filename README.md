@@ -84,6 +84,8 @@ tentacles/
 ├── README.md
 ├── LICENSE
 ├── SETUP.md
+├── UPGRADING.md
+├── CHANGELOG.md
 ├── brand/
 │   ├── README.md
 │   ├── 01-database-cubes.png
@@ -131,6 +133,12 @@ tentacles/
 - A Notion workspace (free tier works)
 - A Claude Pro or Team account (required for Projects and the Notion MCP integration)
 - ~5 minutes for initial setup
+
+---
+
+## Upgrading
+
+Already using Tentacles? See [UPGRADING.md](UPGRADING.md) for how to get the latest version. The agent handles schema migrations automatically — you just swap in the new system prompt.
 
 ---
 

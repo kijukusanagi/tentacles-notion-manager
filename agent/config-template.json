@@ -1,5 +1,6 @@
 {
   "version": "1.0",
+  "system_prompt_version": "1.0",
   "last_updated": "{DATE}",
   "changelog": "v1.0: Initial setup via Tentacles onboarding agent.",
   "workspace": {
