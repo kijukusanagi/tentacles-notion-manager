@@ -52,7 +52,7 @@ Download [`examples/agent-patterns.md`](examples/agent-patterns.md) from this re
 | Component | What it does |
 |-----------|-------------|
 | **Notion template** | 8 interconnected databases with views, formulas, and relations |
-| **System prompt** | Handles onboarding (first run) and daily operations (every run after); includes Effort Logging, Proactive Alerting, and Capacity Planning |
+| **System prompt** | Handles onboarding, daily operations, effort tracking, proactive alerting, capacity planning, and structured deep dives |
 | **Config template** | Generated during onboarding with your real database IDs, project codes, effort defaults, alert thresholds, and capacity limits |
 | **Agent patterns** | Copy-paste prompts for common workflows including time tracking, health checks, sprint planning, and capacity management (optional but recommended) |
 
