@@ -1,0 +1,242 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-03-18",
+  "changelog": "v1.0: Initial setup via Tentacles onboarding agent.",
+  "workspace": {
+    "name": "Acme Corp",
+    "os_layer_name": "Tentacles",
+    "teamspace_id": "abc12345-def6-7890-ghij-klmnopqrstuv",
+    "mcp_url": "https://mcp.notion.com/mcp"
+  },
+  "databases": {
+    "tickets": {
+      "database_id": "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+      "data_source": "ds_1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d",
+      "access": "read_write",
+      "role": "Universal intake layer. Every request starts here.",
+      "title_property": "Title",
+      "required_fields": ["Title", "Project Code", "Description", "Priority"],
+      "agent_required_fields": {"Source": "Agent", "Requester": "tentacles-agent"},
+      "auto_fields": ["Ticket ID", "Serialized ID", "Created Date"],
+      "optional_fields": ["Status", "Assignee", "Due Date", "Related Engagement", "Related Initiative", "Related Project", "Related Client", "Related Tasks"],
+      "enums": {
+        "Status": ["New", "Triaged", "In Progress", "Blocked", "Done", "Closed"],
+        "Priority": ["P0", "P1", "P2", "P3"],
+        "Source": ["Human", "Agent", "Email", "Slack"],
+        "Project Code": ["AC-OPS", "AC-WEB", "AC-SRV", "AC-ONB", "AC-AGENT", "PERS", "NOVA"]
+      },
+      "relations": {
+        "Related Tasks": "tasks (two-way, synced as 'Source Ticket' on Tasks)",
+        "Related Engagement": "engagements (two-way, synced as 'Tickets' on Engagements)",
+        "Related Initiative": "initiatives (two-way, synced as 'Tickets' on Initiatives)",
+        "Related Project": "internal_projects (two-way, synced as 'Tickets' on Internal Projects)",
+        "Related Client": "clients (two-way, synced as 'Tickets' on Clients)"
+      },
+      "formulas": ["Serialized ID", "Ticket ID"]
+    },
+    "tasks": {
+      "database_id": "2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e",
+      "data_source": "ds_2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e",
+      "access": "read_write",
+      "role": "Execution layer. Spawn tasks from tickets.",
+      "title_property": "Task Name",
+      "required_fields": ["Task Name", "Status", "Priority"],
+      "recommended_fields": ["Source Ticket", "Assignee", "Sprint", "Due Date", "Effort Estimate", "Related Internal Project"],
+      "auto_fields": ["Created Date", "Task ID"],
+      "enums": {
+        "Status": ["Backlog", "To Do", "In Progress", "In Review", "Blocked", "Done"],
+        "Priority": ["Urgent", "High", "Medium", "Low"],
+        "Sprint": ["Backlog", "Sprint 1", "Sprint 2", "Sprint 3", "Sprint 4"],
+        "Task Type": ["Task", "Bug", "Milestone", "Spike", "Admin"],
+        "Effort Estimate": ["XS", "S", "M", "L", "XL"]
+      },
+      "relations": {
+        "Source Ticket": "tickets (two-way)",
+        "Related Engagement": "engagements",
+        "Related Initiative": "initiatives",
+        "Related Internal Project": "internal_projects",
+        "Related Partnership": "partnerships",
+        "Related OKR": "okrs",
+        "Parent Task": "tasks (self)",
+        "Subtasks": "tasks (self)"
+      },
+      "other_properties": {
+        "Assignee": "person (single)",
+        "Collaborators": "text",
+        "Due Date": "date",
+        "Completed Date": "date",
+        "Is Milestone": "checkbox"
+      },
+      "formulas": ["Task ID"]
+    },
+    "engagements": {
+      "database_id": "3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f",
+      "data_source": "ds_3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f",
+      "access": "read_write",
+      "role": "Client engagement tracking.",
+      "title_property": "Engagement Name",
+      "required_fields": ["Engagement Name", "Client", "Status"],
+      "enums": {
+        "Status": ["Lead", "Proposal", "Active", "On Hold", "Completed", "Lost"],
+        "Engagement Type": ["Strategy", "Implementation", "Advisory", "Retainer"]
+      },
+      "relations": {
+        "Client": "clients",
+        "Tickets": "tickets (two-way)"
+      },
+      "number_properties": {"Contract Value": "dollar", "Billed to Date": "dollar"},
+      "date_properties": ["Start Date", "End Date"],
+      "formulas": ["Engagement ID", "Remaining Value"]
+    },
+    "initiatives": {
+      "database_id": "4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a",
+      "data_source": "ds_4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a",
+      "access": "read_write",
+      "role": "Strategic pipeline and evaluation.",
+      "title_property": "Initiative Name",
+      "required_fields": ["Initiative Name", "Status"],
+      "enums": {
+        "Status": ["Idea", "Under Evaluation", "Approved", "In Progress", "Completed", "Parked", "Rejected"],
+        "Category": ["Business Development", "Internal Capability", "Client Expansion", "Content/Positioning", "Product Development", "Partnership"],
+        "Initiative Type": ["Revenue Generating", "Cost Saving", "Capability Building", "Strategic Positioning"],
+        "Time Horizon": ["Quick Win < 1 month", "Short Term 1-3 months", "Medium Term 3-6 months", "Long Term 6+ months"],
+        "Impact": ["3 = Massive", "2 = High", "1 = Medium", "0.5 = Low", "0.25 = Minimal"],
+        "Confidence": ["100% = High", "80% = Medium", "50% = Low"],
+        "Source": ["Team Idea", "Client Request", "Market Opportunity", "Partner Suggestion", "Leadership Priority"]
+      },
+      "relations": {
+        "Related Client": "clients",
+        "Linked OKR": "okrs",
+        "Converted to Engagement": "engagements",
+        "Tickets": "tickets (two-way)"
+      },
+      "number_properties": {"Reach": "number", "Effort": "person-weeks"},
+      "formulas": ["Initiative ID", "RICE Score"]
+    },
+    "internal_projects": {
+      "database_id": "5e6f7a8b-9c0d-1e2f-3a4b-5c6d7e8f9a0b",
+      "data_source": "ds_5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b",
+      "access": "read_write",
+      "role": "Internal project delivery.",
+      "title_property": "Project Name",
+      "required_fields": ["Project Name", "Status"],
+      "enums": {
+        "Status": ["Not Started", "Active", "On Hold", "Completed", "Archived"],
+        "Project Type": ["Product Venture", "Operations", "Infrastructure", "Content", "Process Improvement"],
+        "Priority": ["High", "Medium", "Low"]
+      },
+      "relations": {
+        "Tasks": "tasks",
+        "Related Engagement": "engagements",
+        "Related Initiative": "initiatives",
+        "Related OKR": "okrs",
+        "Tickets": "tickets (two-way)"
+      },
+      "formulas": ["Project ID"]
+    },
+    "clients": {
+      "database_id": "6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c",
+      "data_source": "ds_6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c",
+      "access": "read_write",
+      "role": "Client/lead CRM.",
+      "title_property": "Name",
+      "required_fields": ["Name"],
+      "enums": {
+        "Status": ["New Lead", "In Discussion", "Proposal Sent", "Negotiation", "Closed Won", "Closed Lost"],
+        "Source": ["Referral", "Website", "Cold Call", "Event", "Social Media", "Email Campaign", "Partner", "Direct Inquiry"],
+        "Probability": ["High (80-100%)", "Medium (40-79%)", "Low (0-39%)", "Uncertain"]
+      },
+      "relations": {
+        "Tickets": "tickets (two-way)"
+      },
+      "number_properties": {"Value": "dollar"}
+    },
+    "partnerships": {
+      "database_id": "7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d",
+      "data_source": "ds_7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d",
+      "access": "read_write",
+      "role": "External partner relationships.",
+      "title_property": "Partner Name",
+      "required_fields": ["Partner Name"],
+      "enums": {
+        "Partnership Stage": ["Prospect", "In Conversation", "Pilot", "Active", "Dormant", "Closed"],
+        "Partnership Type": ["Referral", "Co-selling", "Co-delivery", "Technology", "Marketing", "Other"]
+      },
+      "relations": {"Related Clients": "clients", "Related Initiatives": "initiatives"}
+    },
+    "okrs": {
+      "database_id": "8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e",
+      "data_source": "ds_8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e",
+      "access": "read_write",
+      "role": "Strategic objectives and key results.",
+      "title_property": "(unnamed — holds OKR name)",
+      "required_fields": ["title (unnamed)", "Type"],
+      "enums": {
+        "Status": ["On Track", "At Risk", "Behind", "Deprioritized", "Completed"],
+        "Type": ["Objective", "Key Result"],
+        "Level": ["Company", "Team", "Individual"],
+        "Time Period": ["Q1 2025", "Q2 2025", "Q3 2025", "Q4 2025", "Annual 2025", "Q1 2026", "Q2 2026", "Q3 2026", "Q4 2026", "Annual 2026"]
+      },
+      "relations": {"Parent Objective": "okrs (self)", "Related Engagements": "engagements"},
+      "number_properties": {"Start Value": "number", "Current Value": "number", "Target Value": "number"},
+      "formulas": ["Progress"]
+    }
+  },
+  "cross_database_relations": {
+    "tickets": ["tasks", "engagements", "initiatives", "internal_projects", "clients"],
+    "tasks": ["tickets", "engagements", "initiatives", "internal_projects", "partnerships", "okrs", "tasks (self)"],
+    "engagements": ["tickets", "clients"],
+    "initiatives": ["tickets", "clients", "engagements", "okrs"],
+    "internal_projects": ["tickets", "tasks", "engagements", "initiatives", "okrs"],
+    "clients": ["tickets"],
+    "partnerships": ["clients", "initiatives"],
+    "okrs": ["engagements", "okrs (self)"]
+  },
+  "users": {
+    "Alice Chen": "user_a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "Bob Martinez": "user_b2c3d4e5-f6a7-8901-bcde-f12345678901"
+  },
+  "project_codes": {
+    "internal_prefix": "AC",
+    "internal": ["AC-OPS", "AC-WEB", "AC-SRV", "AC-ONB", "AC-AGENT"],
+    "clients": ["PERS", "NOVA"]
+  },
+  "project_code_descriptions": {
+    "AC-OPS": "Operations & admin",
+    "AC-WEB": "Website & web projects",
+    "AC-SRV": "Servers & infrastructure",
+    "AC-ONB": "Team onboarding",
+    "AC-AGENT": "AI agent work",
+    "PERS": "Persimmon Capital",
+    "NOVA": "Nova Industries"
+  },
+  "conventions": {
+    "ticket_id_format": "<Project Code>-<zero-padded number>",
+    "examples": ["AC-OPS-001", "AC-WEB-012", "PERS-003", "NOVA-007"],
+    "child_db_naming": "<Serialized ID>-<Purpose>",
+    "child_db_examples": ["AC-OPS-001-Research", "PERS-003-Deliverables"],
+    "child_db_required_props": ["Name (title)", "Source Ticket (relation to tickets)", "Status (select: Pending/Complete/Error)", "Created Date (created_time)"],
+    "child_db_placement": "nested under originating ticket page",
+    "date_format": "expanded Notion MCP format",
+    "date_example": {
+      "date:Due Date:start": "2026-04-01",
+      "date:Due Date:end": null,
+      "date:Due Date:is_datetime": 0
+    },
+    "relations_format": "JSON array of Notion page URLs",
+    "relations_example": "[\"https://www.notion.so/1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d\"]",
+    "error_handling": {
+      "max_retries": 3,
+      "on_error": "log as comment on source ticket with ISO 8601 timestamp",
+      "on_blocking_error": "set ticket Status to Blocked",
+      "never": "modify or delete existing data to recover"
+    }
+  },
+  "workflows": {
+    "client_request": "Create ticket -> Triage -> Spawn tasks -> Execute -> Done",
+    "initiative_approval": "Update initiative -> Create project -> Add project code -> Create tickets -> Spawn tasks",
+    "client_onboarding": "Update client to Closed Won -> Create engagement -> Create project code -> Create onboarding tickets",
+    "agent_autonomous": "Create ticket (Source=Agent) -> In Progress -> Create child DB -> Do work -> Summary comment -> Done",
+    "periodic_review": "Query all DBs -> Flag stale items -> Create summary ticket"
+  }
+}
