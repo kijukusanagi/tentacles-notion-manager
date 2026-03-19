@@ -113,10 +113,14 @@ tentacles/
 │   ├── workflows.md
 │   ├── enum-reference.md
 │   ├── troubleshooting.md
-│   └── agent-patterns.md
+│   ├── agent-patterns.md
+│   ├── migration.md
+│   ├── granular-dives-spec.md
+│   └── v1.2-release-spec.md
 └── examples/
     ├── sample-config.json
-    └── sample-prompts.md
+    ├── sample-prompts.md
+    └── agent-patterns.md
 ```
 
 ---
@@ -131,7 +135,10 @@ tentacles/
 | [`docs/enum-reference.md`](docs/enum-reference.md) | Complete reference of all valid enum values across all 8 databases |
 | [`docs/troubleshooting.md`](docs/troubleshooting.md) | Common issues and how to fix them |
 | [`docs/agent-patterns.md`](docs/agent-patterns.md) | Practical workflows and prompts you can use with the agent |
+| [`docs/migration.md`](docs/migration.md) | External Source Migration spec: scanning, mapping, batching, incremental sync |
+| [`docs/granular-dives-spec.md`](docs/granular-dives-spec.md) | Granular Dives architecture reference: templates, session management, child database structure |
 | [`docs/v1.2-release-spec.md`](docs/v1.2-release-spec.md) | Full specification for v1.2 features: Effort Logging, Proactive Alerting, Capacity Planning |
+| [`examples/agent-patterns.md`](examples/agent-patterns.md) | Copy-paste prompts for all workflows including dives, effort tracking, and capacity planning |
 
 ---
 

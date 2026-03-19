@@ -243,3 +243,71 @@ Compares planned vs actual: tasks completed, hours estimated vs hours spent, per
 > "Rebalance the sprint" / "Redistribute work"
 
 Agent identifies overloaded team members, suggests task reassignments to balance utilization across the team, and shows before/after capacity percentages for each proposed change.
+
+---
+
+## Granular Dives (v1.3)
+
+### Research Dive
+
+> "Dive into CRM options for our team — I want to compare at least 5 platforms."
+
+The agent creates a ticket, selects the Research & Analysis template, builds a child database with one row per CRM platform, and works through each one: pulling key features, pricing, strengths, and weaknesses. Ends with a ranked recommendation.
+
+**When to use:** Evaluating vendors, investigating technologies, market research, competitive analysis, due diligence on potential partners.
+
+### Decision Matrix Dive
+
+> "Help me decide between hiring a contractor vs bringing on a full-time engineer."
+
+The agent asks what criteria matter (cost, speed, quality, cultural fit, etc.), sets up a scored matrix, walks through each option against each criterion, and produces a weighted recommendation with the reasoning laid out.
+
+**When to use:** Any decision with multiple options and competing criteria — tool selection, build vs buy, strategic direction, hiring decisions.
+
+### Project Plan Dive
+
+> "I need to plan the Q2 product launch — break it down into everything we need to do."
+
+The agent creates a phased breakdown: pre-launch, launch week, post-launch. Each phase gets milestones, deliverables, owners, time estimates, dependencies, and risks. After approval, offers to spawn the plan as real tickets and tasks in Tentacles.
+
+**When to use:** Large initiatives that need structured decomposition before work begins. Architecture planning, launch planning, roadmap development.
+
+### Content Workshop Dive
+
+> "I need to write a proposal for the Acme partnership. Let's build it out section by section."
+
+The agent outlines the proposal structure (exec summary, problem statement, proposed solution, timeline, pricing, next steps), then drafts each section for review. User provides feedback per section; agent revises. Final deliverable is compiled and attached to the ticket.
+
+**When to use:** Proposals, reports, articles, presentation outlines, pitch deck structure, any deliverable that benefits from structured section-by-section development.
+
+### Audit Dive
+
+> "Audit our active engagements — which ones are healthy and which need attention?"
+
+The agent pulls all active engagements, creates one row per engagement in the audit child DB, evaluates each against criteria (billing status, recent activity, ticket volume, deadline proximity), and produces a severity-coded report with action items.
+
+**When to use:** Periodic reviews, process audits, data quality checks, compliance reviews, portfolio health assessments.
+
+### Resume a Dive
+
+> "Where did we leave off on the CRM evaluation?"
+
+The agent finds the active dive, reads the child database state, and picks up exactly where the last session ended. Shows progress and suggests the next item to work on.
+
+**When to use:** Any time you want to continue a dive that was paused or interrupted. Dives persist in Notion, so you can come back days or weeks later.
+
+### Quick Dive (Lightweight)
+
+> "Quick dive — what are our options for a team offsite venue? Just need 3-4 options compared."
+
+For smaller scope, the agent still creates the child DB but keeps it lean — fewer items, faster evaluation. The dive might complete in a single session.
+
+**When to use:** Lighter decisions or quick research that still benefit from structured comparison rather than a freeform conversation.
+
+### Plan-to-Execution Dive
+
+> "Take the project plan dive we did for the Q2 launch and turn it into real tickets and tasks."
+
+After a Project Plan dive is complete, the agent can spawn the plan items as actual Tentacles tickets and tasks — with effort estimates, assignees, and dependencies all carried over from the dive. This is the bridge between planning and execution.
+
+**When to use:** After completing a Project Plan dive, when you're ready to start work.
