@@ -42,7 +42,7 @@ Go to [claude.ai](https://claude.ai) → Projects → New Project. Name it whate
 
 ### 3. Say Hello
 
-Open your Claude Project and type `hello` or `let's set up`. The agent walks you through the rest in about 5 minutes — it finds your databases, sets up your project codes, and creates your first real ticket and task.
+Open your Claude Project and type `hello tentacles` or `let's set up`. The agent walks you through the rest in about 5 minutes — it finds your databases, sets up your project codes, and creates your first real ticket and task.
 
 ---
 
