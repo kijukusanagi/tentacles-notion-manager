@@ -108,7 +108,8 @@ tentacles/
 │   ├── project-codes.md
 │   ├── workflows.md
 │   ├── enum-reference.md
-│   └── troubleshooting.md
+│   ├── troubleshooting.md
+│   └── agent-patterns.md
 └── examples/
     ├── sample-config.json
     └── sample-prompts.md
@@ -125,6 +126,7 @@ tentacles/
 | [`docs/workflows.md`](docs/workflows.md) | The 5 standard workflows with step-by-step breakdowns |
 | [`docs/enum-reference.md`](docs/enum-reference.md) | Complete reference of all valid enum values across all 8 databases |
 | [`docs/troubleshooting.md`](docs/troubleshooting.md) | Common issues and how to fix them |
+| [`docs/agent-patterns.md`](docs/agent-patterns.md) | Practical workflows and prompts you can use with the agent |
 
 ---
 
