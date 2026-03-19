@@ -147,3 +147,99 @@ You can adjust property and enum mappings after the initial migration. The agent
 **Chain requests naturally.** After a rollup, you might say "OK, close tickets 4 and 7, and re-prioritize ticket 12 to P1." The agent handles sequential operations in conversation.
 
 **The agent always confirms before writing.** You'll never be surprised by a change — every create and update gets presented for approval first.
+
+---
+
+## Effort Tracking (v1.2)
+
+### Log Time on a Task
+
+> "Log 3 hours on the API integration task"
+
+The agent finds the task, adds hours to the Hours Spent field, and confirms. If hours were already logged, it adds to the existing total.
+
+### Time Report for a Project
+
+> "How much time have we spent on the website redesign?"
+
+The agent traces all tasks linked to the project (via tickets and direct relations), sums Hours Spent, and presents a breakdown by person and by task. Includes estimated vs actual variance if both values exist.
+
+### Sprint Time Summary
+
+> "How many hours did we log this sprint?"
+
+The agent queries all tasks in the current sprint with Hours Spent > 0, groups by assignee, and shows per-person totals against sprint capacity.
+
+### Effort Variance Check
+
+> "Which tasks ran over their estimates?"
+
+The agent finds tasks where Hours Spent exceeds Hours Estimated by more than the configured threshold, shows the variance, and identifies patterns (e.g., "L tasks consistently take 12h instead of 8h — consider adjusting your mapping").
+
+---
+
+## Proactive Alerting (v1.2)
+
+### Morning Briefing with Alerts
+
+> "Morning briefing"
+
+The agent runs all enabled health checks first, presents the alert summary grouped by severity (🔴 critical → 🟡 warning → 🔵 info), then delivers the standard briefing. Critical alerts appear at the top so nothing gets buried.
+
+### Dedicated Health Check
+
+> "Run a health check" / "Any problems I should know about?" / "What needs attention?"
+
+Full scan across all 8 databases. The agent presents findings grouped by severity and offers to take action on any critical or warning items — reassign work, create follow-up tickets, or update stale items.
+
+### Targeted Alert Check
+
+> "Are any engagements falling behind on billing?"
+
+The agent runs the specific relevant check and presents results. Useful when you have a hunch about a specific area and want the agent to validate it.
+
+### Suppress an Alert
+
+> "The Acme engagement is intentionally unbilled — ignore it in alerts"
+
+The agent notes the exception. You can manage alert suppressions to reduce noise on items you're aware of.
+
+---
+
+## Capacity Planning (v1.2)
+
+### Team Capacity Dashboard
+
+> "Show me team capacity" / "Team workload"
+
+Per-person breakdown of sprint load vs capacity with color-coded utilization status. Shows active task count, estimated hours assigned, and remaining bandwidth.
+
+### Find Available Bandwidth
+
+> "Who has bandwidth?" / "Who can take on more work?"
+
+Quick filter for team members under 60% utilization, showing their remaining hours and current active tasks.
+
+### Smart Assignment
+
+> "Assign the API refactor task to Jordan"
+
+Agent checks Jordan's current load before assigning. If over the warning threshold, it warns and suggests who else has bandwidth. Proceeds with assignment only after user confirms.
+
+### Sprint Planning Assistant
+
+> "Help me plan Sprint 2" / "What fits in this sprint?"
+
+Agent shows remaining team capacity, pulls prioritized backlog items with effort estimates, and suggests which items fit. Accounts for per-person capacity limits, not just team totals.
+
+### Velocity Report
+
+> "How did we do last sprint?" / "Sprint velocity"
+
+Compares planned vs actual: tasks completed, hours estimated vs hours spent, per-person performance. Shows trend across recent sprints if historical data exists.
+
+### Rebalance Sprint
+
+> "Rebalance the sprint" / "Redistribute work"
+
+Agent identifies overloaded team members, suggests task reassignments to balance utilization across the team, and shows before/after capacity percentages for each proposed change.

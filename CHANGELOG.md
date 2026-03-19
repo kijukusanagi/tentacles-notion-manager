@@ -2,6 +2,21 @@
 
 All notable changes to Tentacles will be documented in this file.
 
+## [1.2] - 2026-03-19
+
+### Added
+- **Effort Logging** — time tracking on tasks via Hours Spent and Hours Estimated properties
+- **Proactive Alerting** — 10 configurable health checks with severity levels
+- **Capacity Planning** — per-user sprint load tracking with assignment guard
+- New `Type` select property on Tickets
+- New config sections: `effort`, `alerts`, `capacity`
+- `docs/v1.2-release-spec.md` — full v1.2 release specification
+
+### Changed
+- System prompt updated to v1.2
+- Config template updated to v1.2
+- `examples/agent-patterns.md` updated with v1.2 patterns
+
 ## [1.1] - 2026-03-19
 
 ### Added
