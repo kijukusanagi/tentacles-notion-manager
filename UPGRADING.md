@@ -30,6 +30,26 @@ The system prompt contains a version comment at the top (`v1.0`) and a Migration
 
 This means you can always update safely: grab the latest system prompt, paste it in, and the agent handles the rest.
 
+## Upgrading from v1.1 to v1.2
+
+v1.2 adds Effort Logging, Proactive Alerting, and Capacity Planning.
+
+### What changes
+- **Schema**: Two new number fields on Tasks (Hours Spent, Hours Estimated) and a new Type select on Tickets
+- **Config**: Three new top-level sections (effort, alerts, capacity) plus new workflows
+- **System prompt**: New sections for Effort Tracking, Proactive Alerting, and Capacity Planning
+
+### How to upgrade
+1. Replace your system prompt with the v1.2 version from `agent/system-prompt.md`
+2. Start a new conversation — the agent will detect the version mismatch
+3. Say "yes" when it offers to run the v1.1 → v1.2 migration
+4. The agent will add the new database fields and generate an updated config
+5. Upload the new config to Project Knowledge
+
+The migration is non-destructive — no existing data is modified or deleted.
+
+---
+
 ## Version History
 
 See [CHANGELOG.md](CHANGELOG.md) for what changed in each version.

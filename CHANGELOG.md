@@ -5,17 +5,21 @@ All notable changes to Tentacles will be documented in this file.
 ## [1.2] - 2026-03-19
 
 ### Added
-- **Effort Logging** — time tracking on tasks via Hours Spent and Hours Estimated properties
-- **Proactive Alerting** — 10 configurable health checks with severity levels
-- **Capacity Planning** — per-user sprint load tracking with assignment guard
-- New `Type` select property on Tickets
-- New config sections: `effort`, `alerts`, `capacity`
+- Effort Logging: Hours Spent and Hours Estimated number fields on Tasks, auto-populated from Effort Estimate via configurable hours mapping (XS=1h through XL=16h), prompt on task completion, time rollup queries across tickets/projects/engagements
+- Proactive Alerting: 10 configurable health checks — stale tickets, stale P0/P1 tickets, overloaded assignees, orphan tasks, unassigned work, empty engagements, upcoming deadlines, sprint overflow, effort variance — with Critical/Warning/Info severity levels and auto-ticketing for critical alerts
+- Capacity Planning: per-user sprint load tracking, assignment guard that warns before overloading someone, team capacity dashboard, velocity tracking across sprints
+- Type field on Tickets (Request, Bug, Decision, Alert, Proposal) for categorizing ticket intent
+- v1.1 → v1.2 migration entry in Migration Registry — agent auto-detects version mismatch and offers to run schema migration
+- New config sections: effort, alerts, capacity (top-level, alongside workspace and databases)
+- 12 new agent patterns: log time, time reports, sprint time summary, effort variance check, morning briefing with alerts, health check, targeted alerts, team capacity, smart assignment, sprint planning, velocity report, sprint rebalancing
 - `docs/v1.2-release-spec.md` — full v1.2 release specification
 
 ### Changed
-- System prompt updated to v1.2
-- Config template updated to v1.2
-- `examples/agent-patterns.md` updated with v1.2 patterns
+- Morning briefing now runs all enabled health checks first, presents alert summary at top, then delivers standard status report with capacity snapshot
+- Onboarding flow now asks for effort/capacity defaults during Step 2 (Personalize) and creates Hours Spent, Hours Estimated, and Type fields during setup
+- Task creation auto-populates Hours Estimated when Effort Estimate is set
+- Config template includes effort, alerts, and capacity sections with sensible defaults
+- Agent patterns file expanded with Effort Tracking, Proactive Alerting, and Capacity Planning sections
 
 ## [1.1] - 2026-03-19
 

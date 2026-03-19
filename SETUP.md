@@ -35,6 +35,7 @@ Type "hello" or "let's set up" — the agent will walk you through the rest.
 
 It takes about 5 minutes. By the end you'll have:
 - Your company name and project codes configured
+- Effort tracking defaults and per-user capacity limits configured
 - Your first real ticket and task in the system
 - A config file to upload that makes the agent fully operational
 
@@ -42,7 +43,7 @@ The agent will generate a config file at the end of onboarding. Download it, the
 
 ## Step 6 (Optional): Add agent patterns
 
-Download [`docs/agent-patterns.md`](docs/agent-patterns.md) from this repo and upload it to your Project's **Files** section. This gives the agent a library of example prompts and workflows — so when you ask "what can you do?" it can suggest things like morning briefings, weekly rollups, triage runs, and more.
+Download [`examples/agent-patterns.md`](examples/agent-patterns.md) from this repo and upload it to your Project's **Files** section. This gives the agent a library of example prompts and workflows — so when you ask "what can you do?" it can suggest things like morning briefings, weekly rollups, triage runs, and more.
 
 ---
 
@@ -51,9 +52,9 @@ Download [`docs/agent-patterns.md`](docs/agent-patterns.md) from this repo and u
 | Component | What it does |
 |-----------|-------------|
 | **Notion template** | 8 interconnected databases with views, formulas, and relations |
-| **System prompt** | Handles onboarding (first run) and daily operations (every run after) |
-| **Config template** | Generated during onboarding with your real database IDs and project codes |
-| **Agent patterns** | Copy-paste prompts for common workflows (optional but recommended) |
+| **System prompt** | Handles onboarding (first run) and daily operations (every run after); includes Effort Logging, Proactive Alerting, and Capacity Planning |
+| **Config template** | Generated during onboarding with your real database IDs, project codes, effort defaults, alert thresholds, and capacity limits |
+| **Agent patterns** | Copy-paste prompts for common workflows including time tracking, health checks, sprint planning, and capacity management (optional but recommended) |
 
 ## Troubleshooting
 
