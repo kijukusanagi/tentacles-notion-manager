@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="brand/03-octopus-bold.png" alt="Tentacles" width="600">
+</p>
+
 # 🐙 Tentacles
 
 **An open-source, agent-ready operational backbone built in Notion.**
@@ -31,7 +35,7 @@ Tentacles is 8 interconnected Notion databases that track everything from strate
 
 ### 1. Duplicate the Notion Template
 
-Open [`notion-template/TEMPLATE_LINK.md`](notion-template/TEMPLATE_LINK.md), click the template URL, then click **Duplicate** in Notion. All 8 databases, schemas, views, formulas, and relations transfer automatically.
+Click **[Duplicate into Notion →](https://tentacles-manager.notion.site/Tentacles-Management-Layer-3276026675c5817f9668eb0c557689fe)** then click **Duplicate** in the top-right corner. All 8 databases, schemas, views, formulas, and relations transfer automatically.
 
 ### 2. Create a Claude Project
 
@@ -47,6 +51,10 @@ Open your Claude Project and type `hello tentacles` or `let's set up`. The agent
 ---
 
 ## How It Works
+
+<p align="center">
+  <img src="brand/10-workflow-factory.png" alt="Tentacles Workflow" width="500">
+</p>
 
 Tentacles uses a two-mode architecture. With no config file in Project Knowledge, the agent runs **onboarding mode**: it discovers your databases, asks a few questions, personalizes your setup, teaches you the system by creating real data, and generates a config JSON. Once you upload that config to Project Knowledge, the agent switches to **operations mode** and uses the stored IDs, enums, and conventions to operate without re-discovery.
 
@@ -76,6 +84,18 @@ tentacles/
 ├── README.md
 ├── LICENSE
 ├── SETUP.md
+├── brand/
+│   ├── README.md
+│   ├── 01-database-cubes.png
+│   ├── 02-security-guard.png
+│   ├── 03-octopus-bold.png
+│   ├── 04-octopus-soft.png
+│   ├── 05-octopus-servers.png
+│   ├── 06-octopus-oscilloscope.png
+│   ├── 07-contemplative.png
+│   ├── 08-team-crew.png
+│   ├── 09-partnership-whale.png
+│   └── 10-workflow-factory.png
 ├── notion-template/
 │   └── TEMPLATE_LINK.md
 ├── agent/

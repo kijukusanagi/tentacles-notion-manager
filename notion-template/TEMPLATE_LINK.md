@@ -1,6 +1,6 @@
 # Notion Template
 
-> **Template URL:** `PASTE_YOUR_TEMPLATE_URL_HERE`
+> **Template URL:** [https://tentacles-manager.notion.site/Tentacles-Management-Layer-3276026675c5817f9668eb0c557689fe](https://tentacles-manager.notion.site/Tentacles-Management-Layer-3276026675c5817f9668eb0c557689fe)
 
 Duplicate this template into your Notion workspace to get started.
 

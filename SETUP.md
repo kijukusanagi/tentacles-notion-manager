@@ -11,7 +11,7 @@ Get your Tentacles operational backbone running in about 5 minutes.
 
 ## Step 1: Duplicate the Notion Template
 
-1. Open [`notion-template/TEMPLATE_LINK.md`](notion-template/TEMPLATE_LINK.md) and click the template URL
+1. Click the template link: **[Duplicate into Notion →](https://tentacles-manager.notion.site/Tentacles-Management-Layer-3276026675c5817f9668eb0c557689fe)**
 2. Click **Duplicate** in the top-right corner of the Notion page
 3. Choose which workspace to duplicate into
 4. Wait ~30 seconds for duplication to complete
