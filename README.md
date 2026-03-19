@@ -43,12 +43,27 @@ Click **[Duplicate into Notion →](https://tentacles-manager.notion.site/Tentac
 
 ### 2. Create a Claude Project
 
-Go to [claude.ai](https://claude.ai) → Projects → New Project. Name it whatever you want.
+Go to [claude.ai](https://claude.ai) → Projects → New Project. Name it whatever you want (e.g., "Ops Agent").
 
-- Connect the **Notion MCP integration**: in the project, click the integrations icon, search for "Notion", and authorize access to your workspace.
-- Add the **system prompt**: open [`agent/system-prompt.md`](agent/system-prompt.md), copy the entire contents (including the `<tentacles_operating_system>` tags), and paste it into your project's Custom Instructions.
+### 3. Connect the Notion integration
 
-### 3. Say Hello
+- Go to [claude.ai/settings/connectors](https://claude.ai/settings/connectors)
+- Click **Browse Connectors**
+- Find **Notion** under the Web category (or search for it)
+- Click the **+** icon next to Notion, then click **Connect**
+- You'll be redirected to Notion — log in and select the workspace where you duplicated the template
+- Authorize access and you're connected
+
+> **Note:** Connectors are available on all Claude plans, including Free. Once connected, the Notion integration works across all your Claude Projects — you only need to do this once.
+
+### 4. Add the system prompt
+
+- Open [`agent/system-prompt.md`](agent/system-prompt.md) from this repo (view raw)
+- Copy the entire contents (including the `<tentacles_operating_system>` tags)
+- In your Claude Project, click the ⚙️ gear icon at the top-right
+- Find **Instructions** and paste the system prompt
+
+### 5. Say Hello
 
 Open your Claude Project and type `hello tentacles` or `let's set up`. The agent walks you through the rest in about 5 minutes — it finds your databases, sets up your project codes, and creates your first real ticket and task.
 
