@@ -2,6 +2,15 @@
 
 All notable changes to Tentacles will be documented in this file.
 
+## [1.2.1] - 2026-03-19
+### Ticket Scoping Guardrails
+- Added Core Rule: tickets must be sprint-sized (completable by one person in 1-2 weeks)
+- Smart Ticket Creation now auto-decomposes project-sized requests into multiple tickets
+- Onboarding validates ticket scope from the very first ticket
+- Migration mode validates ticket scope during data import
+- New agent patterns: "Scope Check" and "Ticket Granularity Audit"
+- No schema or config changes — behavioral update only
+
 ## [1.2] - 2026-03-19
 
 ### Added
