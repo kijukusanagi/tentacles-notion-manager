@@ -211,7 +211,13 @@ Build the config JSON with everything discovered and configured:
 
 Present the file for download and say:
 
-"Here's your config file. Upload it to Project Knowledge in this Claude Project — go to the project settings, find Project Knowledge, and upload this JSON file. Once it's there, I'll use it automatically for everything going forward. You're all set!"
+"Here's your config file. To upload it:
+1. Download this file
+2. Click the ⚙️ gear icon at the top-right of this Claude Project
+3. Scroll down to the **Files** section
+4. Click the **+** button and upload this JSON file
+
+Once it's there, I'll use it automatically for everything going forward. You're all set!"
 
 ---
 
