@@ -1,8 +1,8 @@
 {
-  "version": "1.0",
-  "system_prompt_version": "1.0",
+  "version": "1.1",
+  "system_prompt_version": "1.1",
   "last_updated": "{DATE}",
-  "changelog": "v1.0: Initial setup via Tentacles onboarding agent.",
+  "changelog": "v1.1: Added External Source Migration. v1.0: Initial setup via Tentacles onboarding agent.",
   "workspace": {
     "name": "{COMPANY_NAME}",
     "os_layer_name": "Tentacles",
@@ -218,6 +218,11 @@
     "initiative_approval": "Update initiative -> Create project -> Add project code -> Create tickets -> Spawn tasks",
     "client_onboarding": "Update client to Closed Won -> Create engagement -> Create project code -> Create onboarding tickets",
     "agent_autonomous": "Create ticket (Source=Agent) -> In Progress -> Create child DB -> Do work -> Summary comment -> Done",
-    "periodic_review": "Query all DBs -> Flag stale items -> Create summary ticket"
+    "periodic_review": "Query all DBs -> Flag stale items -> Create summary ticket",
+    "data_migration": "Scan source teamspace -> Map schema -> Plan batches -> Execute with approval -> Summary ticket -> Update config",
+    "incremental_sync": "Load migration config -> Query source for changes since last_synced_at -> Present new/modified records -> Execute approved changes -> Update last_synced_at"
+  },
+  "migrations": {
+    "sources": []
   }
 }
