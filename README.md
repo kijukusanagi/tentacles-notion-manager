@@ -31,6 +31,7 @@ Tentacles is 8 interconnected Notion databases that track everything from strate
 - **Effort Logging** — time tracking on tasks with Hours Spent and Hours Estimated fields, auto-populated from effort estimates, with time rollups across tickets, projects, and engagements
 - **Proactive Alerting** — 10 configurable health checks (stale tickets, overloaded assignees, sprint overflow, and more) with Critical/Warning/Info severity and auto-ticketing for critical issues
 - **Capacity Planning** — per-user sprint load tracking with an assignment guard that warns before overloading someone, plus velocity tracking across sprints
+- **Granular Dives** — Structured deep work sessions (research, decision matrices, project plans, audits) with resumable child databases
 
 ---
 

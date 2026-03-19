@@ -2,6 +2,18 @@
 
 All notable changes to Tentacles will be documented in this file.
 
+## [1.3] - 2026-03-19
+### Granular Dives
+- Structured deep work sessions with resumable child databases
+- 6 dive templates: Research & Analysis, Decision Matrix, Project Plan, Content Workshop, Audit/Review, Freeform
+- Session management: start, pause, resume across conversations, close with synthesis
+- Proactive dive suggestions during ticket creation and triage
+- Integration with effort tracking (log hours per session) and alerting (stale dives surface in health checks)
+- Project Plan dives can spawn real tickets and tasks after completion
+- New ticket Type enum value: "Dive"
+- Config additions: top-level `dives` section with template and suggestion settings
+- Migration path from v1.2 → v1.3 included in system prompt migration registry
+
 ## [1.2.1] - 2026-03-19
 ### Ticket Scoping Guardrails
 - Added Core Rule: tickets must be sprint-sized (completable by one person in 1-2 weeks)

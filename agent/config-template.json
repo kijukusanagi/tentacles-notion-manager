@@ -1,8 +1,8 @@
 {
-  "version": "1.2",
-  "system_prompt_version": "1.2",
+  "version": "1.3",
+  "system_prompt_version": "1.3",
   "last_updated": "{DATE}",
-  "changelog": "v1.2: Added Effort Logging, Proactive Alerting, and Capacity Planning. v1.1: Added External Source Migration. v1.0: Initial setup via Tentacles onboarding agent.",
+  "changelog": "v1.3: Added Granular Dives — structured deep work sessions with resumable child databases. v1.2: Added Effort Logging, Proactive Alerting, and Capacity Planning. v1.1: Added External Source Migration. v1.0: Initial setup via Tentacles onboarding agent.",
   "workspace": {
     "name": "{COMPANY_NAME}",
     "os_layer_name": "Tentacles",
@@ -71,7 +71,8 @@
           "Bug",
           "Decision",
           "Alert",
-          "Proposal"
+          "Proposal",
+          "Dive"
         ]
       },
       "relations": {
@@ -410,7 +411,7 @@
       "data_source": "{OKRS_DS_ID}",
       "access": "read_write",
       "role": "Strategic objectives and key results.",
-      "title_property": "(unnamed \u2014 holds OKR name)",
+      "title_property": "(unnamed — holds OKR name)",
       "required_fields": [
         "title (unnamed)",
         "Type"
@@ -536,6 +537,7 @@
       "Created Date (created_time)"
     ],
     "child_db_placement": "nested under originating ticket page",
+    "dive_child_db_note": "Granular Dive child databases follow dive template schemas (see dives config) but always include Name (title), Status (select), and Created Date (created_time). Dive child DBs do NOT require Source Ticket relation — they are nested under the ticket page instead.",
     "error_handling": {
       "max_retries": 3,
       "on_error": "log as comment on source ticket with ISO 8601 timestamp",
@@ -554,7 +556,8 @@
     "effort_logging": "Set Effort Estimate -> Auto-populate Hours Estimated -> Complete task -> Log Hours Spent -> Variance comment",
     "health_check": "Run enabled alert checks -> Group by severity -> Present summary -> Auto-ticket critical items -> Offer actions",
     "capacity_check": "Calculate per-user load -> Compare to sprint capacity -> Flag overloaded -> Suggest rebalancing",
-    "morning_briefing_v2": "Run health checks -> Alert summary -> In progress items -> Blocked items -> Due dates -> Capacity snapshot"
+    "morning_briefing_v2": "Run health checks -> Alert summary -> In progress items -> Blocked items -> Due dates -> Capacity snapshot",
+    "granular_dive": "Trigger/suggest dive -> Select template -> Create child DB under ticket -> Populate items -> Work session(s) -> Synthesize -> Close -> Offer follow-ups"
   },
   "migrations": {
     "sources": []
@@ -641,5 +644,50 @@
     "warning_threshold_percent": 80,
     "users": {},
     "assignment_guard": true
+  },
+  "dives": {
+    "enabled": true,
+    "suggest_proactively": true,
+    "suggestion_triggers": {
+      "on_decision_tickets": true,
+      "on_proposal_tickets": true,
+      "on_broad_scope": true,
+      "on_stale_complex": true
+    },
+    "default_template": "freeform",
+    "templates": {
+      "research": {
+        "enabled": true,
+        "label": "Research & Analysis",
+        "description": "Evaluate options, competitors, or technologies systematically"
+      },
+      "decision_matrix": {
+        "enabled": true,
+        "label": "Decision Matrix",
+        "description": "Score and compare options across weighted criteria"
+      },
+      "project_plan": {
+        "enabled": true,
+        "label": "Project Plan",
+        "description": "Break down a large initiative into phased, estimated work"
+      },
+      "content_workshop": {
+        "enabled": true,
+        "label": "Content Workshop",
+        "description": "Draft deliverables section by section with structured review"
+      },
+      "audit": {
+        "enabled": true,
+        "label": "Audit / Review",
+        "description": "Systematic review with findings, severity, and action items"
+      },
+      "freeform": {
+        "enabled": true,
+        "label": "Freeform",
+        "description": "Custom schema — you define the structure"
+      }
+    },
+    "log_effort_on_sessions": true,
+    "auto_spawn_tasks": false
   }
 }

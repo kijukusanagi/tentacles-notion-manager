@@ -30,6 +30,28 @@ The system prompt contains a version comment at the top (`v1.0`) and a Migration
 
 This means you can always update safely: grab the latest system prompt, paste it in, and the agent handles the rest.
 
+## v1.2 → v1.3 (Granular Dives)
+
+### What's New
+Structured deep work sessions that create child databases under tickets. Six templates (research, decision matrix, project plan, content workshop, audit, freeform), full session management with cross-conversation resume, and proactive dive suggestions.
+
+### Upgrade Steps
+1. Copy the new `agent/system-prompt.md` from this repo
+2. Replace your Claude Project's custom instructions with the new version
+3. Start a new conversation — the agent will detect the version mismatch (your config says v1.2, the prompt is v1.3) and offer to run the migration
+4. The migration adds "Dive" to the Tickets Type enum and adds the `dives` config section
+5. Upload the regenerated config file to Project Knowledge
+
+### Schema Changes
+- Tickets: "Dive" added to Type SELECT enum
+
+### Config Changes
+- New top-level `dives` section with template configurations and suggestion settings
+- New `granular_dive` workflow entry
+- `dive_child_db_note` added to conventions
+
+---
+
 ## Upgrading from v1.1 to v1.2
 
 v1.2 adds Effort Logging, Proactive Alerting, and Capacity Planning.
