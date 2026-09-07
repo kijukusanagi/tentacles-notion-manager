@@ -82,3 +82,6 @@ Additions (prompt-only, no schema change), approved:
 1. Startup Config Validation check 4 — UUID-shape check on database_id / data_source / teamspace_id: warn once and continue, do not refuse. Gap found by the v1.4 agent itself during testing (fake-but-not-placeholder IDs pass check 1).
 2. Single-config and placeholder refusals lead with the action (remove file from Files → new conversation / run onboarding), explanation second.
 Blocking unknown (Instructions length) is resolved by checkpoint 0. Tag v1.4 to follow.
+
+## Release gate
+> "re-paste passed" — 80,490 characters accepted in Project Instructions. Approved: PR v1.4-hardening → main, squash-merge, annotated tag v1.4 on main at the merge commit (no prior tags exist; format chosen to match prompt header and commit prefixes), push tag, delete remote branch, keep local.
