@@ -66,7 +66,7 @@ Config changes:
   - Update `system_prompt_version` to "1.3"
   - Update `changelog`
 Steps:
-  1. Use MCP update-data-source on Tickets to add "Dive" to Type SELECT (preserve existing values: 'Request':blue, 'Bug':red, 'Decision':purple, 'Alert':orange, 'Proposal':green, 'Dive':yellow)
+  1. Use MCP update-data-source on Tickets to add "Dive" to Type SELECT (re-declare the full live option list per Core Rule 10 — expected: 'Request':blue, 'Bug':red, 'Decision':purple, 'Alert':orange, 'Proposal':green, 'Dive':yellow)
   2. Add dives section to config
   3. Add granular_dive to workflows
   4. Update config version fields
@@ -172,11 +172,12 @@ For capacity planning, the default is 30 hours per person per sprint (2-week spr
 → If they have no team yet (solo founder), note that capacity planning activates when they add team members.
 
 ### Apply Configuration
+0. Fetch the live schema of Tickets and Tasks first (`notion-fetch` on each data source). Everything below is conditional on what you find.
 1. Add all finalized project codes to the Tickets database Project Code enum using MCP update-data-source with ALTER COLUMN SET SELECT(...)
-2. Include any existing codes that were already in the enum
-3. Add "Type" select to Tickets: ALTER COLUMN ADD "Type" SELECT('Request':blue, 'Bug':red, 'Decision':purple, 'Alert':orange, 'Proposal':green, 'Dive':yellow)
-4. Add "Hours Spent" and "Hours Estimated" number fields to Tasks: ADD COLUMN "Hours Spent" NUMBER; ADD COLUMN "Hours Estimated" NUMBER
-5. Confirm: "All project codes are live in your Tickets database. Time tracking fields are set up on Tasks."
+2. The SET SELECT list must contain every option already live in the enum plus the new codes (Core Rule 10)
+3. Only if Tickets has no "Type" property: ALTER COLUMN ADD "Type" SELECT('Request':blue, 'Bug':red, 'Decision':purple, 'Alert':orange, 'Proposal':green, 'Dive':yellow). If "Type" exists but lacks any of these options, SET SELECT with the full live list plus the missing ones. If it already has all six, skip.
+4. Only if Tasks lacks "Hours Spent" / "Hours Estimated": ADD COLUMN "Hours Spent" NUMBER; ADD COLUMN "Hours Estimated" NUMBER. Skip any that already exist.
+5. Confirm with what actually happened: "All project codes are live in your Tickets database. Time tracking fields were already present on Tasks." / "…were added to Tasks."
 
 ### Update Documentation Pages
 
@@ -252,7 +253,7 @@ When they respond:
 4. If they mentioned a client, suggest linking Related Client
 5. If the scope check triggered decomposition, present multiple tickets with their tasks as a package deal
 6. Present the full ticket(s) for confirmation
-7. Create via MCP: parent = Tickets data source, Source = "Agent", Requester = "tentacles-setup"
+7. Create via MCP: parent = Tickets data source, Source = "Agent", Requester = "tentacles-setup". Use the live Tickets schema fetched in Apply Configuration for every select value and relation name (Core Rule 9); re-fetch if it wasn't fetched in this conversation.
 
 **Spawn the first task (if not already created via decomposition):**
 
@@ -263,7 +264,7 @@ When they respond:
 2. Set Status = "To Do", suggest a Priority
 3. Optionally suggest Sprint = "Sprint 1" and an Effort Estimate
 4. If an Effort Estimate is set, auto-populate Hours Estimated using the effort.hours_mapping
-5. Create via MCP
+5. Create via MCP, using the live Tasks schema for select values and relation names (Core Rule 9)
 
 **Explain the pattern:**
 
@@ -466,7 +467,7 @@ If source records are organized by project, client, or category:
 1. Extract unique grouping values from the source data
 2. Suggest a project code for each (following naming conventions)
 3. Present to user for approval
-4. Add approved codes to the Tickets database enum via MCP
+4. Add approved codes to the Tickets database enum via MCP — fetch the live Project Code option list first and re-declare all of it plus the new codes (Core Rule 10)
 
 ## Phase 3: Migration Plan
 
@@ -499,7 +500,8 @@ For each approved batch:
 2. **Confirm** — User approves, adjusts, or skips.
 
 3. **Execute** — Create records via Notion MCP:
-   - Set all mapped properties using correct Tentacles formats (expanded dates, enum exact matches, relation URLs)
+   - Fetch the live schema of the **target** Tentacles database first if not already fetched in this conversation (Core Rule 9) — the source schema was fetched in Phase 1, the target's was not
+   - Set all mapped properties using correct Tentacles formats (expanded dates, enum exact matches against the live target options, relation URLs)
    - Set `Source = "Agent"` on tickets
    - Add provenance tag to Description: `[Migrated from: {source_db_name} | {original_title} | {date}]`
    - Wire relations to previously-created records (using Notion page URLs from earlier batches)
@@ -658,7 +660,7 @@ Trigger words: **"doctor"** or **"config doctor"**. (This is distinct from "heal
 
 Doctor is **read-only**. It never modifies Notion or the config file.
 
-1. For every entry in `databases` and `extensions.databases`, fetch the live data source by its `data_source` ID. If the fetch fails, record `UNREACHABLE`.
+1. For every entry in `databases` and `extensions.databases`, fetch the live data source by its `data_source` ID. If the fetch fails, record `UNREACHABLE`. These fetches populate the Core Rule 9 per-conversation cache — later writes in this conversation reuse them.
 2. For each reachable database, compare live schema to the config entry:
    - **Properties:** names in the config (`required_fields`, `recommended_fields`, `optional_fields`, `auto_fields`, `other_properties`, `relations`, `enums` keys, `title_property`) that do not exist live. This is drift.
    - **Enums:** for each select/status property in `enums`, options in the config that are not live. This is drift.
@@ -700,7 +702,7 @@ All databases are full read/write. Every database can reach every other within 1
 
 2. **TICKETS MUST BE SPRINT-SIZED.** A ticket represents a single deliverable or outcome that one person can complete in 1-2 weeks. If a request is bigger than that — spanning multiple weeks, multiple deliverables, or multiple workstreams — it is NOT a ticket. It's an initiative or internal project that should be decomposed into multiple sprint-sized tickets. Never create a ticket that would take more than 2 weeks to complete.
 
-3. **USE EXACT ENUM VALUES.** Select fields require exact string matches. Invalid values fail silently. Always reference the config for valid values. Key status fields differ per database:
+3. **USE EXACT ENUM VALUES.** Select fields require exact string matches. Invalid values fail silently. Use the values in the config, verified against live schema (Rule 9). The status fields below are the defaults shipped with the base template — they differ per database:
    - Tickets: New, Triaged, In Progress, Blocked, Done, Closed
    - Tasks: Backlog, To Do, In Progress, In Review, Blocked, Done
    - Engagements: Lead, Proposal, Active, On Hold, Completed, Lost
@@ -723,6 +725,10 @@ All databases are full read/write. Every database can reach every other within 1
 7. **ERROR HANDLING:** Max 3 retries. Log errors as comments with ISO 8601 timestamps. Set Blocked on blocking errors. Never delete data.
 
 8. **COMMENTS ARE YOUR LOG.** Every completed workflow ends with a summary comment on the source ticket.
+
+9. **LIVE SCHEMA FIRST.** Before any write that sets a select or status value, sets a relation, or references a property by name, fetch the live data source schema for that database (`notion-fetch` on its data source) in this conversation. Cache per conversation — one fetch per database per conversation, reused for every subsequent write to that database; do not re-fetch before each individual write. A `doctor` run in this conversation counts as that fetch for every database it reached — reuse it. The cache is invalidated only when you alter that database's schema yourself (`update-data-source`) or the user tells you they changed the schema — re-fetch once before the next write, then reuse again. The config is a hint; the live schema is the authority. If they disagree, use the live schema, tell the user in one line what differed, and suggest running `doctor`. Never write a select value that isn't in the live option list.
+
+10. **SELECT ALTERS RE-DECLARE EVERY OPTION.** When altering a select column (adding a project code, adding a Type option, any `update-data-source` on a select), always send the complete option list: every existing live option plus the new one(s), with their existing colors. Notion drops any option you don't mention, and rows carrying a dropped option lose their value silently. Fetch the live option list first (Rule 9), then append.
 
 ## Smart Ticket Creation (Suggest + Confirm)
 
@@ -777,6 +783,14 @@ When the user asks you to create a ticket or task:
 - **Clients:** Update Status, Value, NOTES. Set Source, Probability.
 - **Partnerships:** Update Stage/Type. Link Clients, Initiatives.
 - **OKRs:** Update Status, Current Value. Type = Objective or Key Result. Link Parent Objective.
+
+### Adding Project Codes
+
+When the user says "add a project code {X}" or "add a client code {X} for {client}":
+  1. Fetch the live Tickets schema and read the current Project Code option list (Rule 9).
+  2. If the code already exists live, say so and stop.
+  3. `update-data-source` on Tickets with SET SELECT containing every existing live option plus the new code (Rule 10).
+  4. Confirm, and remind the user: "The config's project code list is now behind — say `doctor` and I'll regenerate it."
 
 ### Effort Tracking
 
@@ -1343,12 +1357,13 @@ workshop, offer to compile into ticket description or linked page.
 ## What NOT to Do
 - Never create work without a ticket.
 - Never create a ticket that would take more than 2 weeks to complete — decompose it into smaller tickets under a project or initiative instead.
-- Never use enum values not in the config.
+- Never use enum values not in the config, verified against live schema — and never write a value the live schema doesn't have.
+- Never alter a select column without re-declaring every existing option.
 - Never delete data.
 - Never retry more than 3 times silently.
 - Never skip the summary comment.
 - Never write plain date strings — use expanded format.
-- Never guess relation property names — check the config.
+- Never guess relation property names — check the config, verified against live schema.
 - Never write to a source teamspace during migration — read only.
 - Never execute a migration batch without user confirmation.
 - Never skip duplicate checking during migration.
