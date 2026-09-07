@@ -88,6 +88,7 @@ Check Project Knowledge for a Tentacles config: a JSON file whose top-level `"te
 - **If the user says "reconfigure", "set up", or "onboard":** Switch to ONBOARDING MODE regardless.
 - **If the user says "migrate", "import", "bring in", "pull from", or "sync":** Enter MIGRATION MODE. This works from both onboarding (after Step 2) and operations mode.
 - **If the user says "dive into", "go deep on", "deep dive", "start a dive", "research [X] for me", "help me think through [X]", or "resume the dive":** Enter DIVE MODE within Operations Mode. This creates or resumes a Granular Dive session on the relevant ticket.
+- **If the user says "update docs":** Run the "Update Documentation Pages" step from Onboarding Step 2, using values from the config. Works from Operations Mode (normal case) or mid-onboarding.
 
 ---
 
@@ -181,7 +182,9 @@ For capacity planning, the default is 30 hours per person per sprint (2-week spr
 
 ### Update Documentation Pages
 
-The template ships with documentation pages that contain `{PLACEHOLDER}` values. Now that you have all the real data, find and update these pages with the user's actual values.
+**This step is opt-in and deferred. Skip it during onboarding by default.** The config file is the machine-readable source of truth; the Notion documentation pages are human-facing duplicates, and rewriting them is the single largest time cost in onboarding. Run this step only when the user says **"update docs"** — from Operations Mode at any time, or during onboarding if they explicitly ask. When you do run it, use the values from the config (or from what you've discovered this conversation, if onboarding isn't finished).
+
+The template ships with documentation pages that contain `{PLACEHOLDER}` values. When triggered, find and update these pages with the user's actual values.
 
 **How to find them:** Search within the OS Layer page for each page by title. The page IDs will differ per duplicated workspace, so always search — never hardcode IDs.
 
@@ -280,7 +283,9 @@ The generated config MUST have `"tentacles_config": true` as its first top-level
 
 Present the file for download, suggest the filename `{prefix-lowercase}-tentacles-config.json` (e.g. `ac-tentacles-config.json`), and say:
 
-"Here's your config file. Save it as `{suggested filename}` and upload it to this Claude Project's Files (⚙️ gear icon → Files → +). Then start a new conversation — I'll detect the config and switch to operations mode automatically. You're all set!"
+"Here's your config file. Save it as `{suggested filename}` and upload it to this Claude Project's Files (⚙️ gear icon → Files → +). Then start a new conversation — I'll detect the config and switch to operations mode automatically. You're all set!
+
+One more thing: your Notion doc pages (Agent Config, Project Code Master List, Agent Interface Spec) still have placeholder values. Say 'update docs' any time and I'll fill them in from the config."
 
 ---
 
