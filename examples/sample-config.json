@@ -1,9 +1,10 @@
 {
   "tentacles_config": false,
   "_comment": "tentacles_config is the mode-detection marker. It is false here because this is an EXAMPLE with fake IDs. Do not upload this file to Project Knowledge. Generated configs carry true.",
-  "version": "1.0",
-  "last_updated": "2026-03-18",
-  "changelog": "v1.0: Initial setup via Tentacles onboarding agent.",
+  "version": "1.4",
+  "system_prompt_version": "1.4",
+  "last_updated": "2026-09-07",
+  "changelog": "v1.4: Hardening & extensibility — tentacles_config marker, startup config validation, live-schema-first writes, Config Doctor, extension databases, deferred doc-page updates. No schema changes. v1.3: Added Granular Dives — structured deep work sessions with resumable child databases. v1.2: Added Effort Logging, Proactive Alerting, and Capacity Planning. v1.1: Added External Source Migration. v1.0: Initial setup via Tentacles onboarding agent.",
   "workspace": {
     "name": "Acme Corp",
     "os_layer_name": "Tentacles",
@@ -17,15 +18,70 @@
       "access": "read_write",
       "role": "Universal intake layer. Every request starts here.",
       "title_property": "Title",
-      "required_fields": ["Title", "Project Code", "Description", "Priority"],
-      "agent_required_fields": {"Source": "Agent", "Requester": "tentacles-agent"},
-      "auto_fields": ["Ticket ID", "Serialized ID", "Created Date"],
-      "optional_fields": ["Status", "Assignee", "Due Date", "Related Engagement", "Related Initiative", "Related Project", "Related Client", "Related Tasks"],
+      "required_fields": [
+        "Title",
+        "Project Code",
+        "Description",
+        "Priority"
+      ],
+      "agent_required_fields": {
+        "Source": "Agent",
+        "Requester": "tentacles-agent"
+      },
+      "auto_fields": [
+        "Ticket ID",
+        "Serialized ID",
+        "Created Date"
+      ],
+      "optional_fields": [
+        "Status",
+        "Assignee",
+        "Due Date",
+        "Related Engagement",
+        "Related Initiative",
+        "Related Project",
+        "Related Client",
+        "Related Tasks",
+        "Type"
+      ],
       "enums": {
-        "Status": ["New", "Triaged", "In Progress", "Blocked", "Done", "Closed"],
-        "Priority": ["P0", "P1", "P2", "P3"],
-        "Source": ["Human", "Agent", "Email", "Slack"],
-        "Project Code": ["AC-OPS", "AC-WEB", "AC-SRV", "AC-ONB", "AC-AGENT", "PERS", "NOVA"]
+        "Status": [
+          "New",
+          "Triaged",
+          "In Progress",
+          "Blocked",
+          "Done",
+          "Closed"
+        ],
+        "Priority": [
+          "P0",
+          "P1",
+          "P2",
+          "P3"
+        ],
+        "Source": [
+          "Human",
+          "Agent",
+          "Email",
+          "Slack"
+        ],
+        "Project Code": [
+          "AC-OPS",
+          "AC-WEB",
+          "AC-SRV",
+          "AC-ONB",
+          "AC-AGENT",
+          "PERS",
+          "NOVA"
+        ],
+        "Type": [
+          "Request",
+          "Bug",
+          "Decision",
+          "Alert",
+          "Proposal",
+          "Dive"
+        ]
       },
       "relations": {
         "Related Tasks": "tasks (two-way, synced as 'Source Ticket' on Tasks)",
@@ -34,7 +90,10 @@
         "Related Project": "internal_projects (two-way, synced as 'Tickets' on Internal Projects)",
         "Related Client": "clients (two-way, synced as 'Tickets' on Clients)"
       },
-      "formulas": ["Serialized ID", "Ticket ID"]
+      "formulas": [
+        "Serialized ID",
+        "Ticket ID"
+      ]
     },
     "tasks": {
       "database_id": "2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e",
@@ -42,15 +101,59 @@
       "access": "read_write",
       "role": "Execution layer. Spawn tasks from tickets.",
       "title_property": "Task Name",
-      "required_fields": ["Task Name", "Status", "Priority"],
-      "recommended_fields": ["Source Ticket", "Assignee", "Sprint", "Due Date", "Effort Estimate", "Related Internal Project"],
-      "auto_fields": ["Created Date", "Task ID"],
+      "required_fields": [
+        "Task Name",
+        "Status",
+        "Priority"
+      ],
+      "recommended_fields": [
+        "Source Ticket",
+        "Assignee",
+        "Sprint",
+        "Due Date",
+        "Effort Estimate",
+        "Related Internal Project"
+      ],
+      "auto_fields": [
+        "Created Date",
+        "Task ID"
+      ],
       "enums": {
-        "Status": ["Backlog", "To Do", "In Progress", "In Review", "Blocked", "Done"],
-        "Priority": ["Urgent", "High", "Medium", "Low"],
-        "Sprint": ["Backlog", "Sprint 1", "Sprint 2", "Sprint 3", "Sprint 4"],
-        "Task Type": ["Task", "Bug", "Milestone", "Spike", "Admin"],
-        "Effort Estimate": ["XS", "S", "M", "L", "XL"]
+        "Status": [
+          "Backlog",
+          "To Do",
+          "In Progress",
+          "In Review",
+          "Blocked",
+          "Done"
+        ],
+        "Priority": [
+          "Urgent",
+          "High",
+          "Medium",
+          "Low"
+        ],
+        "Sprint": [
+          "Backlog",
+          "Sprint 1",
+          "Sprint 2",
+          "Sprint 3",
+          "Sprint 4"
+        ],
+        "Task Type": [
+          "Task",
+          "Bug",
+          "Milestone",
+          "Spike",
+          "Admin"
+        ],
+        "Effort Estimate": [
+          "XS",
+          "S",
+          "M",
+          "L",
+          "XL"
+        ]
       },
       "relations": {
         "Source Ticket": "tickets (two-way)",
@@ -67,9 +170,14 @@
         "Collaborators": "text",
         "Due Date": "date",
         "Completed Date": "date",
-        "Is Milestone": "checkbox"
+        "Is Milestone": "checkbox",
+        "Hours Spent": "number",
+        "Hours Estimated": "number"
       },
-      "formulas": ["Task ID"]
+      "formulas": [
+        "Task ID"
+      ],
+      "optional_fields": []
     },
     "engagements": {
       "database_id": "3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f",
@@ -77,18 +185,43 @@
       "access": "read_write",
       "role": "Client engagement tracking.",
       "title_property": "Engagement Name",
-      "required_fields": ["Engagement Name", "Client", "Status"],
+      "required_fields": [
+        "Engagement Name",
+        "Client",
+        "Status"
+      ],
       "enums": {
-        "Status": ["Lead", "Proposal", "Active", "On Hold", "Completed", "Lost"],
-        "Engagement Type": ["Strategy", "Implementation", "Advisory", "Retainer"]
+        "Status": [
+          "Lead",
+          "Proposal",
+          "Active",
+          "On Hold",
+          "Completed",
+          "Lost"
+        ],
+        "Engagement Type": [
+          "Strategy",
+          "Implementation",
+          "Advisory",
+          "Retainer"
+        ]
       },
       "relations": {
         "Client": "clients",
         "Tickets": "tickets (two-way)"
       },
-      "number_properties": {"Contract Value": "dollar", "Billed to Date": "dollar"},
-      "date_properties": ["Start Date", "End Date"],
-      "formulas": ["Engagement ID", "Remaining Value"]
+      "number_properties": {
+        "Contract Value": "dollar",
+        "Billed to Date": "dollar"
+      },
+      "date_properties": [
+        "Start Date",
+        "End Date"
+      ],
+      "formulas": [
+        "Engagement ID",
+        "Remaining Value"
+      ]
     },
     "initiatives": {
       "database_id": "4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a",
@@ -96,15 +229,59 @@
       "access": "read_write",
       "role": "Strategic pipeline and evaluation.",
       "title_property": "Initiative Name",
-      "required_fields": ["Initiative Name", "Status"],
+      "required_fields": [
+        "Initiative Name",
+        "Status"
+      ],
       "enums": {
-        "Status": ["Idea", "Under Evaluation", "Approved", "In Progress", "Completed", "Parked", "Rejected"],
-        "Category": ["Business Development", "Internal Capability", "Client Expansion", "Content/Positioning", "Product Development", "Partnership"],
-        "Initiative Type": ["Revenue Generating", "Cost Saving", "Capability Building", "Strategic Positioning"],
-        "Time Horizon": ["Quick Win < 1 month", "Short Term 1-3 months", "Medium Term 3-6 months", "Long Term 6+ months"],
-        "Impact": ["3 = Massive", "2 = High", "1 = Medium", "0.5 = Low", "0.25 = Minimal"],
-        "Confidence": ["100% = High", "80% = Medium", "50% = Low"],
-        "Source": ["Team Idea", "Client Request", "Market Opportunity", "Partner Suggestion", "Leadership Priority"]
+        "Status": [
+          "Idea",
+          "Under Evaluation",
+          "Approved",
+          "In Progress",
+          "Completed",
+          "Parked",
+          "Rejected"
+        ],
+        "Category": [
+          "Business Development",
+          "Internal Capability",
+          "Client Expansion",
+          "Content/Positioning",
+          "Product Development",
+          "Partnership"
+        ],
+        "Initiative Type": [
+          "Revenue Generating",
+          "Cost Saving",
+          "Capability Building",
+          "Strategic Positioning"
+        ],
+        "Time Horizon": [
+          "Quick Win < 1 month",
+          "Short Term 1-3 months",
+          "Medium Term 3-6 months",
+          "Long Term 6+ months"
+        ],
+        "Impact": [
+          "3 = Massive",
+          "2 = High",
+          "1 = Medium",
+          "0.5 = Low",
+          "0.25 = Minimal"
+        ],
+        "Confidence": [
+          "100% = High",
+          "80% = Medium",
+          "50% = Low"
+        ],
+        "Source": [
+          "Team Idea",
+          "Client Request",
+          "Market Opportunity",
+          "Partner Suggestion",
+          "Leadership Priority"
+        ]
       },
       "relations": {
         "Related Client": "clients",
@@ -112,8 +289,14 @@
         "Converted to Engagement": "engagements",
         "Tickets": "tickets (two-way)"
       },
-      "number_properties": {"Reach": "number", "Effort": "person-weeks"},
-      "formulas": ["Initiative ID", "RICE Score"]
+      "number_properties": {
+        "Reach": "number",
+        "Effort": "person-weeks"
+      },
+      "formulas": [
+        "Initiative ID",
+        "RICE Score"
+      ]
     },
     "internal_projects": {
       "database_id": "5e6f7a8b-9c0d-1e2f-3a4b-5c6d7e8f9a0b",
@@ -121,11 +304,30 @@
       "access": "read_write",
       "role": "Internal project delivery.",
       "title_property": "Project Name",
-      "required_fields": ["Project Name", "Status"],
+      "required_fields": [
+        "Project Name",
+        "Status"
+      ],
       "enums": {
-        "Status": ["Not Started", "Active", "On Hold", "Completed", "Archived"],
-        "Project Type": ["Product Venture", "Operations", "Infrastructure", "Content", "Process Improvement"],
-        "Priority": ["High", "Medium", "Low"]
+        "Status": [
+          "Not Started",
+          "Active",
+          "On Hold",
+          "Completed",
+          "Archived"
+        ],
+        "Project Type": [
+          "Product Venture",
+          "Operations",
+          "Infrastructure",
+          "Content",
+          "Process Improvement"
+        ],
+        "Priority": [
+          "High",
+          "Medium",
+          "Low"
+        ]
       },
       "relations": {
         "Tasks": "tasks",
@@ -134,7 +336,9 @@
         "Related OKR": "okrs",
         "Tickets": "tickets (two-way)"
       },
-      "formulas": ["Project ID"]
+      "formulas": [
+        "Project ID"
+      ]
     },
     "clients": {
       "database_id": "6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c",
@@ -142,16 +346,41 @@
       "access": "read_write",
       "role": "Client/lead CRM.",
       "title_property": "Name",
-      "required_fields": ["Name"],
+      "required_fields": [
+        "Name"
+      ],
       "enums": {
-        "Status": ["New Lead", "In Discussion", "Proposal Sent", "Negotiation", "Closed Won", "Closed Lost"],
-        "Source": ["Referral", "Website", "Cold Call", "Event", "Social Media", "Email Campaign", "Partner", "Direct Inquiry"],
-        "Probability": ["High (80-100%)", "Medium (40-79%)", "Low (0-39%)", "Uncertain"]
+        "Status": [
+          "New Lead",
+          "In Discussion",
+          "Proposal Sent",
+          "Negotiation",
+          "Closed Won",
+          "Closed Lost"
+        ],
+        "Source": [
+          "Referral",
+          "Website",
+          "Cold Call",
+          "Event",
+          "Social Media",
+          "Email Campaign",
+          "Partner",
+          "Direct Inquiry"
+        ],
+        "Probability": [
+          "High (80-100%)",
+          "Medium (40-79%)",
+          "Low (0-39%)",
+          "Uncertain"
+        ]
       },
       "relations": {
         "Tickets": "tickets (two-way)"
       },
-      "number_properties": {"Value": "dollar"}
+      "number_properties": {
+        "Value": "dollar"
+      }
     },
     "partnerships": {
       "database_id": "7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d",
@@ -159,12 +388,31 @@
       "access": "read_write",
       "role": "External partner relationships.",
       "title_property": "Partner Name",
-      "required_fields": ["Partner Name"],
+      "required_fields": [
+        "Partner Name"
+      ],
       "enums": {
-        "Partnership Stage": ["Prospect", "In Conversation", "Pilot", "Active", "Dormant", "Closed"],
-        "Partnership Type": ["Referral", "Co-selling", "Co-delivery", "Technology", "Marketing", "Other"]
+        "Partnership Stage": [
+          "Prospect",
+          "In Conversation",
+          "Pilot",
+          "Active",
+          "Dormant",
+          "Closed"
+        ],
+        "Partnership Type": [
+          "Referral",
+          "Co-selling",
+          "Co-delivery",
+          "Technology",
+          "Marketing",
+          "Other"
+        ]
       },
-      "relations": {"Related Clients": "clients", "Related Initiatives": "initiatives"}
+      "relations": {
+        "Related Clients": "clients",
+        "Related Initiatives": "initiatives"
+      }
     },
     "okrs": {
       "database_id": "8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e",
@@ -172,27 +420,99 @@
       "access": "read_write",
       "role": "Strategic objectives and key results.",
       "title_property": "(unnamed — holds OKR name)",
-      "required_fields": ["title (unnamed)", "Type"],
+      "required_fields": [
+        "title (unnamed)",
+        "Type"
+      ],
       "enums": {
-        "Status": ["On Track", "At Risk", "Behind", "Deprioritized", "Completed"],
-        "Type": ["Objective", "Key Result"],
-        "Level": ["Company", "Team", "Individual"],
-        "Time Period": ["Q1 2025", "Q2 2025", "Q3 2025", "Q4 2025", "Annual 2025", "Q1 2026", "Q2 2026", "Q3 2026", "Q4 2026", "Annual 2026"]
+        "Status": [
+          "On Track",
+          "At Risk",
+          "Behind",
+          "Deprioritized",
+          "Completed"
+        ],
+        "Type": [
+          "Objective",
+          "Key Result"
+        ],
+        "Level": [
+          "Company",
+          "Team",
+          "Individual"
+        ],
+        "Time Period": [
+          "Q1 2025",
+          "Q2 2025",
+          "Q3 2025",
+          "Q4 2025",
+          "Annual 2025",
+          "Q1 2026",
+          "Q2 2026",
+          "Q3 2026",
+          "Q4 2026",
+          "Annual 2026"
+        ]
       },
-      "relations": {"Parent Objective": "okrs (self)", "Related Engagements": "engagements"},
-      "number_properties": {"Start Value": "number", "Current Value": "number", "Target Value": "number"},
-      "formulas": ["Progress"]
+      "relations": {
+        "Parent Objective": "okrs (self)",
+        "Related Engagements": "engagements"
+      },
+      "number_properties": {
+        "Start Value": "number",
+        "Current Value": "number",
+        "Target Value": "number"
+      },
+      "formulas": [
+        "Progress"
+      ]
     }
   },
   "cross_database_relations": {
-    "tickets": ["tasks", "engagements", "initiatives", "internal_projects", "clients"],
-    "tasks": ["tickets", "engagements", "initiatives", "internal_projects", "partnerships", "okrs", "tasks (self)"],
-    "engagements": ["tickets", "clients"],
-    "initiatives": ["tickets", "clients", "engagements", "okrs"],
-    "internal_projects": ["tickets", "tasks", "engagements", "initiatives", "okrs"],
-    "clients": ["tickets"],
-    "partnerships": ["clients", "initiatives"],
-    "okrs": ["engagements", "okrs (self)"]
+    "tickets": [
+      "tasks",
+      "engagements",
+      "initiatives",
+      "internal_projects",
+      "clients"
+    ],
+    "tasks": [
+      "tickets",
+      "engagements",
+      "initiatives",
+      "internal_projects",
+      "partnerships",
+      "okrs",
+      "tasks (self)"
+    ],
+    "engagements": [
+      "tickets",
+      "clients"
+    ],
+    "initiatives": [
+      "tickets",
+      "clients",
+      "engagements",
+      "okrs"
+    ],
+    "internal_projects": [
+      "tickets",
+      "tasks",
+      "engagements",
+      "initiatives",
+      "okrs"
+    ],
+    "clients": [
+      "tickets"
+    ],
+    "partnerships": [
+      "clients",
+      "initiatives"
+    ],
+    "okrs": [
+      "engagements",
+      "okrs (self)"
+    ]
   },
   "users": {
     "Alice Chen": "user_a1b2c3d4-e5f6-7890-abcd-ef1234567890",
@@ -200,33 +520,29 @@
   },
   "project_codes": {
     "internal_prefix": "AC",
-    "internal": ["AC-OPS", "AC-WEB", "AC-SRV", "AC-ONB", "AC-AGENT"],
-    "clients": ["PERS", "NOVA"]
-  },
-  "project_code_descriptions": {
-    "AC-OPS": "Operations & admin",
-    "AC-WEB": "Website & web projects",
-    "AC-SRV": "Servers & infrastructure",
-    "AC-ONB": "Team onboarding",
-    "AC-AGENT": "AI agent work",
-    "PERS": "Persimmon Capital",
-    "NOVA": "Nova Industries"
+    "internal": [
+      "AC-OPS",
+      "AC-WEB",
+      "AC-SRV",
+      "AC-ONB",
+      "AC-AGENT"
+    ],
+    "clients": [
+      "PERS",
+      "NOVA"
+    ]
   },
   "conventions": {
     "ticket_id_format": "<Project Code>-<zero-padded number>",
-    "examples": ["AC-OPS-001", "AC-WEB-012", "PERS-003", "NOVA-007"],
     "child_db_naming": "<Serialized ID>-<Purpose>",
-    "child_db_examples": ["AC-OPS-001-Research", "PERS-003-Deliverables"],
-    "child_db_required_props": ["Name (title)", "Source Ticket (relation to tickets)", "Status (select: Pending/Complete/Error)", "Created Date (created_time)"],
+    "child_db_required_props": [
+      "Name (title)",
+      "Source Ticket (relation to tickets)",
+      "Status (select: Pending/Complete/Error)",
+      "Created Date (created_time)"
+    ],
     "child_db_placement": "nested under originating ticket page",
-    "date_format": "expanded Notion MCP format",
-    "date_example": {
-      "date:Due Date:start": "2026-04-01",
-      "date:Due Date:end": null,
-      "date:Due Date:is_datetime": 0
-    },
-    "relations_format": "JSON array of Notion page URLs",
-    "relations_example": "[\"https://www.notion.so/1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d\"]",
+    "dive_child_db_note": "Granular Dive child databases follow dive template schemas (see dives config) but always include Name (title), Status (select), and Created Date (created_time). Dive child DBs do NOT require Source Ticket relation — they are nested under the ticket page instead.",
     "error_handling": {
       "max_retries": 3,
       "on_error": "log as comment on source ticket with ISO 8601 timestamp",
@@ -239,6 +555,155 @@
     "initiative_approval": "Update initiative -> Create project -> Add project code -> Create tickets -> Spawn tasks",
     "client_onboarding": "Update client to Closed Won -> Create engagement -> Create project code -> Create onboarding tickets",
     "agent_autonomous": "Create ticket (Source=Agent) -> In Progress -> Create child DB -> Do work -> Summary comment -> Done",
-    "periodic_review": "Query all DBs -> Flag stale items -> Create summary ticket"
+    "periodic_review": "Query all DBs -> Flag stale items -> Create summary ticket",
+    "data_migration": "Scan source teamspace -> Map schema -> Plan batches -> Execute with approval -> Summary ticket -> Update config",
+    "incremental_sync": "Load migration config -> Query source for changes since last_synced_at -> Present new/modified records -> Execute approved changes -> Update last_synced_at",
+    "effort_logging": "Set Effort Estimate -> Auto-populate Hours Estimated -> Complete task -> Log Hours Spent -> Variance comment",
+    "health_check": "Run enabled alert checks -> Group by severity -> Present summary -> Auto-ticket critical items -> Offer actions",
+    "capacity_check": "Calculate per-user load -> Compare to sprint capacity -> Flag overloaded -> Suggest rebalancing",
+    "morning_briefing_v2": "Run health checks -> Alert summary -> In progress items -> Blocked items -> Due dates -> Capacity snapshot",
+    "granular_dive": "Trigger/suggest dive -> Select template -> Create child DB under ticket -> Populate items -> Work session(s) -> Synthesize -> Close -> Offer follow-ups"
+  },
+  "migrations": {
+    "sources": []
+  },
+  "effort": {
+    "hours_mapping": {
+      "XS": 1,
+      "S": 2,
+      "M": 4,
+      "L": 8,
+      "XL": 16
+    },
+    "prompt_on_completion": true,
+    "track_variance": true,
+    "default_log_unit": "hours"
+  },
+  "alerts": {
+    "enabled": true,
+    "run_on_briefing": true,
+    "auto_ticket_on_critical": true,
+    "checks": {
+      "stale_tickets": {
+        "enabled": true,
+        "threshold_days": 7,
+        "severity": "warning"
+      },
+      "stale_critical_tickets": {
+        "enabled": true,
+        "threshold_hours": 24,
+        "severity": "critical",
+        "applies_to": [
+          "P0"
+        ]
+      },
+      "stale_high_tickets": {
+        "enabled": true,
+        "threshold_days": 3,
+        "severity": "warning",
+        "applies_to": [
+          "P1"
+        ]
+      },
+      "overloaded_assignees": {
+        "enabled": true,
+        "max_open_tasks": 8,
+        "severity": "warning"
+      },
+      "orphan_tasks": {
+        "enabled": true,
+        "severity": "info"
+      },
+      "unassigned_work": {
+        "enabled": true,
+        "severity": "warning",
+        "min_status": "Triaged"
+      },
+      "empty_engagements": {
+        "enabled": true,
+        "threshold_days": 30,
+        "severity": "warning"
+      },
+      "upcoming_deadlines": {
+        "enabled": true,
+        "lookahead_days": 3,
+        "severity": "info"
+      },
+      "sprint_overflow": {
+        "enabled": true,
+        "severity": "warning",
+        "requires": "capacity"
+      },
+      "effort_variance": {
+        "enabled": true,
+        "threshold_percentage": 50,
+        "severity": "info",
+        "requires": "effort"
+      }
+    }
+  },
+  "capacity": {
+    "enabled": true,
+    "sprint_duration_weeks": 2,
+    "default_hours_per_sprint": 30,
+    "warning_threshold_percent": 80,
+    "users": {
+      "Alice Chen": {
+        "hours_per_sprint": 30
+      },
+      "Bob Martinez": {
+        "hours_per_sprint": 25
+      }
+    },
+    "assignment_guard": true
+  },
+  "dives": {
+    "enabled": true,
+    "suggest_proactively": true,
+    "suggestion_triggers": {
+      "on_decision_tickets": true,
+      "on_proposal_tickets": true,
+      "on_broad_scope": true,
+      "on_stale_complex": true
+    },
+    "default_template": "freeform",
+    "templates": {
+      "research": {
+        "enabled": true,
+        "label": "Research & Analysis",
+        "description": "Evaluate options, competitors, or technologies systematically"
+      },
+      "decision_matrix": {
+        "enabled": true,
+        "label": "Decision Matrix",
+        "description": "Score and compare options across weighted criteria"
+      },
+      "project_plan": {
+        "enabled": true,
+        "label": "Project Plan",
+        "description": "Break down a large initiative into phased, estimated work"
+      },
+      "content_workshop": {
+        "enabled": true,
+        "label": "Content Workshop",
+        "description": "Draft deliverables section by section with structured review"
+      },
+      "audit": {
+        "enabled": true,
+        "label": "Audit / Review",
+        "description": "Systematic review with findings, severity, and action items"
+      },
+      "freeform": {
+        "enabled": true,
+        "label": "Freeform",
+        "description": "Custom schema — you define the structure"
+      }
+    },
+    "log_effort_on_sessions": true,
+    "auto_spawn_tasks": false
+  },
+  "extensions": {
+    "_comment": "Empty in this example. See docs/extending.md and extensions._example_entry in agent/config-template.json.",
+    "databases": []
   }
 }

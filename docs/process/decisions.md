@@ -34,3 +34,26 @@ Accepted as-is: Version Check at v1.4 ahead of B5; extensions.databases forward 
 Clarified: a `doctor` run populates the Rule 9 cache (same read); stated in Rule 9 and in Doctor step 1.
 Accepted as-is: new "Adding Project Codes" subsection (ops-mode path previously specified nowhere); Migration Phase 4 target-schema fetch; L69/L177/L470 reference Rule 10 rather than restate it.
 Process: B3 and B4/B5 may be one combined review if diffs stay clean. docs/process/ to hold audit prompt, reflection protocol, phase-a-audit, decisions.
+
+## Import task — approved with 2 additions
+> "Import approved. Two additions before it commits:
+> 1. Add scratchpad/ to .gitignore in the same commit. Those files were never tracked — this is their first entry into version control, not a move. decisions.md in particular is only useful if it's append-only from here.
+> 2. In docs/process/README.md, note that decisions.md is append-only: every gated approval block gets appended verbatim, nothing rewritten or summarized."
+
+## Non-gated docs (B4) — approved with 4 changes
+> "Non-gated docs approved with four changes. B3's prompt/config-template diffs and B5's registry block are still not reviewed — send those before committing anything in those two sections.
+> 1. extensions._example_entry: strip it at config generation time (Onboarding Step 4) and have Startup Config Validation flag it as a placeholder if found in a file marked tentacles_config: true. As written, a generated config can carry {MEETINGS_*} through validation.
+> 2. Drop the doctor line from Mode Detection. Triggers stay where the section is defined.
+> 3. Keep SETUP's plan wording, and add one sentence: "If you don't see Projects in your sidebar, it may not be available on your plan."
+> 4. Add .gitattributes with `* text=auto` in the B4 commit.
+> Commit order approved: B3, #33, B4, B5 — but B3 and B5 only after I see their gated diffs."
+
+## B3 + B5 — approved with 2 amendments
+> "B3 and B5 approved. Two amendments, then commit.
+> 1. Bootstrap sentence — apply it, but tightened. As proposed, "a JSON file with system_prompt_version and a databases map" matches config-template.json and sample-config.json, which is exactly what B1 excludes. Use this shape instead:
+> If no file carries "tentacles_config": true, but a JSON file in Project Knowledge has a system_prompt_version and a databases map, treat it as a possible pre-v1.4 config: run Startup Config Validation on it first. If it fails the placeholder check, it is a template, not a config — ignore it and proceed to Onboarding Mode as normal. If it passes, enter Operations Mode; the Version Check will offer the v1.3 → v1.4 migration, which adds the marker. This bootstrap path exists only to reach that migration — once the marker is present, normal Mode Detection applies.
+> Put it in Mode Detection with a cross-reference from the registry block. Add the same note to UPGRADING.md so the v1.3 → v1.4 section explains why the first conversation looks different.
+> 2. .gitattributes: conservative plan approved. Five modified files convert in B4, leave the six untouched, no renormalize commit.
+> Commit B3 → #33 → B4 → B5, append every approval block verbatim to decisions.md, deliver the handoff with the fresh-setup test script.
+> Do not open the PR or tag. The prompt is 80,335 chars against an untested Instructions limit — the fresh-setup run resolves that before anything merges. Flag it explicitly in the handoff as the one blocking unknown."
+Notes: B3-only doc files (workflows, agent-patterns, troubleshooting "8" sites) ride in B3; docs with mixed B3/B4 edits (README, SETUP, architecture, v1.2 spec) ride in B4. Prompt timing lines (#22/23) ride in B4.

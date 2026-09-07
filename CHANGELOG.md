@@ -2,6 +2,20 @@
 
 All notable changes to Tentacles will be documented in this file.
 
+## [1.4] - 2026-09-07
+### Hardening & Extensibility
+- Mode detection keys on a `"tentacles_config": true` marker instead of a filename glob; templates and examples carry `false`
+- Startup config validation: refuses configs with `{PLACEHOLDER}` values, stops on multiple configs, warns once on unknown `system_prompt_version`
+- Core Rule 9 *live schema first*: fetch live data source schema once per conversation before select/relation/property writes — config is a hint, live schema is authority
+- Core Rule 10: select alters re-declare every existing option (Notion drops unmentioned ones)
+- `doctor` / `config doctor`: read-only drift report of config vs live schema, with config regeneration offer
+- Database count driven by the config (`databases` + `extensions.databases`); base template still ships 8
+- `extensions` config section and `docs/extending.md` for user-added databases (2-hop-to-Tickets rule)
+- Onboarding doc-page updates are opt-in via `update docs` (largest onboarding time cost removed from the default path)
+- Ops-mode "add a project code" behavior specified (was advertised in docs but not in the prompt)
+- Docs reconciled: sample-config to v1.4 shape, registry labels aligned, v1.2 spec marked historical, project-plan moved to `docs/history/`, duplicate agent-patterns collapsed, setup time stated as 15–30 minutes, `docs/process/` build record added
+- No schema changes; no template changes
+
 ## [1.3] - 2026-03-19
 ### Granular Dives
 - Structured deep work sessions with resumable child databases
