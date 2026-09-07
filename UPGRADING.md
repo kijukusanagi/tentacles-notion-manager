@@ -98,7 +98,7 @@ If your filename previously matched `*-config-*.json`, it still works — the na
 
 **Why the first conversation looks different:** your v1.3 config has no `tentacles_config` marker, which is what v1.4 normally looks for. The v1.4 prompt has a one-time bootstrap rule for exactly this case — a marker-less JSON with `system_prompt_version` and a `databases` map is validated (a template with placeholder IDs is ignored; a real config passes) and then treated as a pre-v1.4 config so the migration can be offered. Once the migrated config with the marker is uploaded, that rule never applies again.
 
-**Forks:** if your fork carries its own version string (e.g. `cl-1.0`), add it to the known-version list in the Startup: Config Validation section of your fork's prompt; otherwise the agent will warn once per conversation.
+**Forks:** if your fork carries its own version string (e.g. `myfork-1.0`), add it to the known-version list in the Startup: Config Validation section of your fork's prompt; otherwise the agent will warn once per conversation.
 
 ## Version History
 See CHANGELOG.md for what changed in each version.

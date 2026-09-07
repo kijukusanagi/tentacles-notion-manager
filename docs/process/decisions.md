@@ -57,3 +57,7 @@ Process: B3 and B4/B5 may be one combined review if diffs stay clean. docs/proce
 > Commit B3 → #33 → B4 → B5, append every approval block verbatim to decisions.md, deliver the handoff with the fresh-setup test script.
 > Do not open the PR or tag. The prompt is 80,335 chars against an untested Instructions limit — the fresh-setup run resolves that before anything merges. Flag it explicitly in the handoff as the one blocking unknown."
 Notes: B3-only doc files (workflows, agent-patterns, troubleshooting "8" sites) ride in B3; docs with mixed B3/B4 edits (README, SETUP, architecture, v1.2 spec) ride in B4. Prompt timing lines (#22/23) ride in B4.
+
+## Post-handoff — generalization pass, approved
+> "yes go for it!" (in reply to: swap the fork-specific `cl-1.0` example for a neutral one in the prompt's Startup Config Validation and in UPGRADING.md; leave the pre-existing "Quipos"/"OS Layer Next Effect" migration examples and the test-script template split for after the timed run.)
+Rule applied: docs/process/ is the build record and may name forks; everything outside it must read as if the forks don't exist.
