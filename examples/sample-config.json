@@ -1,4 +1,6 @@
 {
+  "tentacles_config": false,
+  "_comment": "tentacles_config is the mode-detection marker. It is false here because this is an EXAMPLE with fake IDs. Do not upload this file to Project Knowledge. Generated configs carry true.",
   "version": "1.0",
   "last_updated": "2026-03-18",
   "changelog": "v1.0: Initial setup via Tentacles onboarding agent.",
