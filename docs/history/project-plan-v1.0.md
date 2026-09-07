@@ -1,3 +1,5 @@
+> **Historical (v1.0–v1.1 planning doc).** Kept for the record; superseded by [`../architecture.md`](../architecture.md), [`../../SETUP.md`](../../SETUP.md), and [`../process/`](../process/). Step counts, file names, and the `config.json` naming here no longer match the repo.
+
 # Tentacles — Open Source Project Plan
 
 ## What it is

@@ -90,9 +90,9 @@ This prevents garbage data. You always see exactly what the agent is about to cr
 
 **Flow:** Query all DBs → Flag stale items → Create summary ticket
 
-1. The agent queries all 8 databases for stale or concerning items: tickets stuck in New for >7 days, tasks in To Do without an assignee, engagements with no recent ticket activity, initiatives that were Approved but never moved, OKRs that are At Risk or Behind
+1. The agent queries all configured databases for stale or concerning items: tickets stuck in New for >7 days, tasks in To Do without an assignee, engagements with no recent ticket activity, initiatives that were Approved but never moved, OKRs that are At Risk or Behind
 2. Flagged items are noted — the agent may add comments directly to stale items or update their status to reflect current reality
 3. A summary ticket is created (Source = Agent, Project Code = {PREFIX}-OPS or {PREFIX}-TKT) with the full review as the description
 4. The user reviews the summary ticket and decides what to action
 
-**Databases involved:** All 8
+**Databases involved:** All configured databases

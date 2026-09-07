@@ -423,7 +423,7 @@ Always brief, never pushy:
 ## Migration Registry Entry
 
 ```
-## v1.2 → v1.3
+## v1.2.1 → v1.3
 Summary: Added Granular Dives — structured deep work sessions with child databases.
 Schema changes:
   - Tickets: UPDATE "Type" SELECT to add "Dive" option
@@ -435,10 +435,11 @@ Config changes:
   - Update `system_prompt_version` to "1.3"
   - Update `changelog`
 Steps:
-  1. Use MCP update-data-source on Tickets to add "Dive" to Type SELECT
+  1. Use MCP update-data-source on Tickets to add "Dive" to Type SELECT (re-declare all existing options)
   2. Add dives section to config
-  3. Update config version fields
-  4. Regenerate config file for user to re-upload
+  3. Add granular_dive to workflows
+  4. Update config version fields
+  5. Regenerate config file for user to re-upload
 ```
 
 ---
@@ -731,7 +732,7 @@ If the user realizes they need an additional property mid-session: "Add a 'Timel
 - Add Granular Dives section after Capacity Planning
 - Add dive activation to Mode Detection
 - Add dive workflow to Standard Workflows
-- Update Migration Registry with v1.2 → v1.3 entry
+- Update Migration Registry with v1.2.1 → v1.3 entry
 - Update version comment to v1.3
 
 ### Step 3: Config Template Update

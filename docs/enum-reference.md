@@ -1,6 +1,8 @@
 # Enum Reference
 
-The agent requires **exact string matches** for all select fields. Invalid values fail silently in the Notion API — the field just won't be set, with no error returned. Always use the values listed here.
+The agent requires **exact string matches** for all select fields. Invalid values fail silently in the Notion API — the field just won't be set, with no error returned.
+
+> **These are the defaults shipped with the base template.** Since v1.4 the agent treats the **live Notion schema** as the authority and fetches it before writing (Core Rule 9). If you've renamed or added options in Notion, the live values win over this page and over the config. Run `doctor` to see where your config has drifted.
 
 ---
 
@@ -11,6 +13,7 @@ The agent requires **exact string matches** for all select fields. Invalid value
 | Status | New, Triaged, In Progress, Blocked, Done, Closed |
 | Priority | P0, P1, P2, P3 |
 | Source | Human, Agent, Email, Slack |
+| Type | Request, Bug, Decision, Alert, Proposal, Dive |
 | Project Code | *(Set during onboarding — varies per workspace)* |
 
 ---

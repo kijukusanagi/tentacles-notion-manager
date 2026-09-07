@@ -190,7 +190,7 @@ The agent runs all enabled health checks first, presents the alert summary group
 
 > "Run a health check" / "Any problems I should know about?" / "What needs attention?"
 
-Full scan across all 8 databases. The agent presents findings grouped by severity and offers to take action on any critical or warning items — reassign work, create follow-up tickets, or update stale items.
+Full scan across all configured databases. The agent presents findings grouped by severity and offers to take action on any critical or warning items — reassign work, create follow-up tickets, or update stale items.
 
 ### Targeted Alert Check
 

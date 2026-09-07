@@ -22,6 +22,20 @@ You do NOT need to re-duplicate the Notion template for schema updates.
 After running migrations, the agent will generate an updated config file.
 Replace the old one in Project Knowledge with the new version.
 
+## Upgrading from v1.0 to v1.1
+
+v1.1 adds External Source Migration. No schema changes.
+
+### What changes
+- **Config**: New top-level `migrations` section (`{"sources": []}`)
+- **System prompt**: New Migration Mode
+
+### How to upgrade
+1. Replace your system prompt with the v1.1 version from `agent/system-prompt.md`
+2. Start a new conversation — the agent will detect the version mismatch
+3. Say "yes" when it offers to run the v1.0 → v1.1 migration (config-only)
+4. Upload the new config to Project Knowledge
+
 ## Upgrading from v1.1 to v1.2
 
 v1.2 adds Effort Logging, Proactive Alerting, and Capacity Planning.
@@ -63,6 +77,28 @@ v1.3 adds Granular Dives — structured deep work sessions with resumable child 
 3. Say "yes" when it offers to run the v1.2.1 → v1.3 migration
 4. The agent will update the Type enum and generate an updated config
 5. Upload the new config to Project Knowledge
+
+## Upgrading from v1.3 to v1.4
+
+v1.4 is a hardening and extensibility release. **No schema changes** — the Notion template is untouched.
+
+### What changes
+- **Config**: New first key `"tentacles_config": true` (mode-detection marker — replaces the old `*-config-*.json` filename rule) and new top-level `extensions` section (`{"databases": []}`)
+- **System prompt**: Startup config validation (refuses placeholder configs, warns on unknown versions), Core Rule 9 *live schema first* and Core Rule 10 *select alters re-declare every option*, a read-only `doctor` command that diffs your config against live Notion schema, database count driven by the config instead of a hardcoded 8, and doc-page updates moved to an opt-in `update docs` command
+- **Docs**: `docs/extending.md` (adding your own databases), `docs/process/` (build record), `docs/history/` (superseded planning doc)
+
+### How to upgrade
+1. Replace your system prompt with the v1.4 version from `agent/system-prompt.md`
+2. Start a new conversation — the agent will detect the v1.3 config and offer the v1.3 → v1.4 migration
+3. Say "yes" — it adds the marker and the `extensions` section and regenerates the config (no Notion changes)
+4. Upload the new config to your project's Files, replacing the old one, and start a new conversation
+5. Say `doctor` — this is the first time the agent compares your config to live schema, and the drift table is worth reading once
+
+If your filename previously matched `*-config-*.json`, it still works — the name no longer matters, only the marker.
+
+**Why the first conversation looks different:** your v1.3 config has no `tentacles_config` marker, which is what v1.4 normally looks for. The v1.4 prompt has a one-time bootstrap rule for exactly this case — a marker-less JSON with `system_prompt_version` and a `databases` map is validated (a template with placeholder IDs is ignored; a real config passes) and then treated as a pre-v1.4 config so the migration can be offered. Once the migrated config with the marker is uploaded, that rule never applies again.
+
+**Forks:** if your fork carries its own version string (e.g. `myfork-1.0`), add it to the known-version list in the Startup: Config Validation section of your fork's prompt; otherwise the agent will warn once per conversation.
 
 ## Version History
 See CHANGELOG.md for what changed in each version.

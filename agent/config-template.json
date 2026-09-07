@@ -1,8 +1,10 @@
 {
-  "version": "1.3",
-  "system_prompt_version": "1.3",
+  "tentacles_config": false,
+  "_comment": "tentacles_config is the mode-detection marker. It is false here because this file is a TEMPLATE with placeholder IDs. The agent sets it to true in the config it generates during onboarding. Never set it to true by hand on a file that still contains {PLACEHOLDER} values.",
+  "version": "1.4",
+  "system_prompt_version": "1.4",
   "last_updated": "{DATE}",
-  "changelog": "v1.3: Added Granular Dives — structured deep work sessions with resumable child databases. v1.2: Added Effort Logging, Proactive Alerting, and Capacity Planning. v1.1: Added External Source Migration. v1.0: Initial setup via Tentacles onboarding agent.",
+  "changelog": "v1.4: Hardening & extensibility — tentacles_config marker, startup config validation, live-schema-first writes, Config Doctor, extension databases, deferred doc-page updates. No schema changes. v1.3: Added Granular Dives — structured deep work sessions with resumable child databases. v1.2: Added Effort Logging, Proactive Alerting, and Capacity Planning. v1.1: Added External Source Migration. v1.0: Initial setup via Tentacles onboarding agent.",
   "workspace": {
     "name": "{COMPANY_NAME}",
     "os_layer_name": "Tentacles",
@@ -689,5 +691,30 @@
     },
     "log_effort_on_sessions": true,
     "auto_spawn_tasks": false
+  },
+  "extensions": {
+    "_comment": "Databases you added beyond the core 8. Each entry has the same shape as a core databases.* entry plus role and relations_to_tickets. Onboarding never fills this in — add entries by hand per docs/extending.md, then run 'doctor'. An extension must reach Tickets within 2 hops (relations_to_tickets set, or a relation to a core database that relates to Tickets) or the intake layer can't see it.",
+    "_example_entry": {
+      "key": "meetings",
+      "database_id": "{MEETINGS_DB_ID}",
+      "data_source": "{MEETINGS_DS_ID}",
+      "access": "read_write",
+      "role": "Meeting log. One row per meeting; action items become tickets.",
+      "relations_to_tickets": "Related Meetings",
+      "title_property": "Name",
+      "required_fields": ["Name", "Date"],
+      "optional_fields": ["Attendees", "Notes", "Related Tickets"],
+      "enums": {
+        "Status": ["Scheduled", "Held", "Cancelled"]
+      },
+      "relations": {
+        "Related Tickets": "tickets"
+      },
+      "other_properties": {
+        "Date": "date",
+        "Attendees": "person (multiple)"
+      }
+    },
+    "databases": []
   }
 }

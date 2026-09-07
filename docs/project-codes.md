@@ -55,4 +55,4 @@ You can add new project codes at any time:
 - **Ask the agent:** "Add a new project code AC-TRAIN for training and workshops" — the agent updates the Tickets database enum via MCP and confirms.
 - **Add a new client code:** "Add a client code RVST for Riverstone Analytics" — same process.
 
-Never add codes manually via the Notion UI if you want the agent to use them reliably. The agent validates against the config's code list, so if you add codes manually, ask the agent to sync the config afterward.
+Prefer asking the agent over adding codes in the Notion UI. The agent reads the live Project Code options before every write (so codes added by hand *will* be seen), but the config's code list will be out of date until you run `doctor` and upload the regenerated config. Either way, the agent re-declares every existing option when it alters the enum — Notion silently drops any option that isn't re-declared, so never edit the enum with a partial list.

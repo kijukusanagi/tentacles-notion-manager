@@ -2,11 +2,11 @@
 
 ## Overview
 
-Tentacles is 8 interconnected Notion databases plus a Claude AI agent. The databases form the "OS Layer" — a structured backbone for tracking work from strategy to execution. The agent reads and writes to all 8 databases via Notion's MCP integration, using a config file stored in Claude Project Knowledge to operate without re-discovering the workspace on every session.
+Tentacles is a set of interconnected Notion databases plus a Claude AI agent. The base template ships 8 core databases; the agent operates on whatever the config lists, including any you add (see [`extending.md`](extending.md)). The databases form the "OS Layer" — a structured backbone for tracking work from strategy to execution. The agent reads and writes to all configured databases via Notion's MCP integration, using a config file stored in Claude Project Knowledge to operate without re-discovering the workspace on every session.
 
 ---
 
-## The 8 Databases
+## The 8 Core Databases
 
 ### 🎫 Tickets
 
@@ -113,7 +113,7 @@ OKRs → OKRs (self-referencing parent/child)
 ### Two-Mode Architecture
 
 **Onboarding Mode** — triggered when no config file is in Project Knowledge, or when the user says "reconfigure." The agent:
-1. Discovers and verifies all 8 databases in the correct teamspace
+1. Discovers and verifies the 8 core databases in the correct teamspace
 2. Personalizes the system (company name, prefix, project codes, team members)
 3. Updates the documentation pages in the Notion template with real values
 4. Teaches the system by creating the user's first real ticket and task
@@ -131,13 +131,18 @@ The agent never modifies pages, databases, or content outside the user's Tentacl
 
 The config JSON (generated during onboarding, stored in Project Knowledge) contains:
 
-- **Database IDs and data source IDs** for all 8 databases — used in every MCP call
+- **`tentacles_config: true`** — the mode-detection marker (v1.4). The agent only treats a file as a config if this key is true; templates and examples carry `false`
+
+- **Database IDs and data source IDs** for every configured database (8 core + any under `extensions.databases`) — used in every MCP call
 - **Enum values** for every select/multi-select property — ensures exact string matches
 - **Relation mappings** — property names and which database each relation points to
 - **Project codes** — internal prefix, all internal codes, all client codes
 - **Users** — name to Notion user ID mapping
 - **Conventions** — ticket ID format, child DB naming, date format, error handling rules
-- **Workflows** — short descriptions of the 5 standard workflows
+- **Workflows** — short descriptions of the standard workflows (12 in v1.4, from client request through granular dives)
+- **Extensions** — `extensions.databases`, any databases you added beyond the core 8 (see [`extending.md`](extending.md))
+
+Since v1.4 the config is a **hint, not the authority**: before writing a select value, a relation, or a property by name, the agent fetches the live schema once per conversation and uses that (Core Rule 9). Say `doctor` to see where the config has drifted from Notion.
 
 The config is what makes the agent fast and reliable. Without it, every session would require re-discovering the workspace. With it, the agent operates immediately with full context.
 
@@ -155,7 +160,7 @@ Example: `AC-OPS-001`, `PERS-042`
 
 Example: `AC-OPS-001-Deliverables`, `PERS-042-Meeting Notes`
 
-Child databases are nested under their originating ticket page and must include a Source Ticket relation back to the Tickets database.
+Child databases are nested under their originating ticket page. Agent-autonomous child DBs include a Source Ticket relation back to the Tickets database; Granular Dive child DBs follow their template schema instead and rely on nesting under the ticket page (see `conventions.dive_child_db_note` in the config).
 
 ### Date Format
 All date properties use expanded Notion MCP format:

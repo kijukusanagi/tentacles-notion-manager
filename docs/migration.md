@@ -577,6 +577,8 @@ This prevents the most dangerous migration error: importing an entire dataset fr
 
 ## Implementation Priority
 
+> The tier labels below are from the original v1.1 plan and do **not** correspond to shipped Tentacles versions (v1.2 shipped effort/alerting/capacity, v1.3 shipped dives). Incremental sync shipped with the v1.1 prompt; the "Advanced" items are unscheduled.
+
 ### v1.1 — Core Migration
 - Scan & discover databases in any teamspace
 - Schema mapping with user approval

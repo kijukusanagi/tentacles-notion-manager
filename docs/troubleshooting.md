@@ -4,7 +4,7 @@
 
 ## Agent can't find databases
 
-**Symptom:** The agent says it can't find the OS Layer page or can't locate the 8 databases.
+**Symptom:** The agent says it can't find the OS Layer page or can't locate the 8 core databases.
 
 **Cause:** The Notion MCP integration isn't connected, or it's authorized for the wrong workspace.
 
@@ -58,13 +58,18 @@
 
 **Symptom:** The agent keeps running onboarding even though you've already set up.
 
-**Cause:** The config file isn't in Project Knowledge, or the filename doesn't match the pattern `*-config-*.json`.
+**Cause:** The config file isn't in the project's Files, or it doesn't carry the marker `"tentacles_config": true` as a top-level key. (Since v1.4 the filename doesn't matter — the marker does. `config-template.json` and `sample-config.json` carry `false` on purpose and will never be treated as a config.)
 
 **Fix:**
-1. In your Claude Project, go to Settings → Project Knowledge
+1. In your Claude Project, click the ⚙️ gear icon → Files
 2. Check if the config file is there
 3. If not, retrieve the config from your onboarding conversation (the agent outputs it as a code block) and re-upload it
-4. If the filename is wrong (e.g., it's named `config.json` without matching the pattern), rename it to something like `acme-config-v1.json`
+4. Open the file and confirm the first key is `"tentacles_config": true`. If it's missing (a pre-v1.4 config), say `doctor` — the agent will offer the v1.3 → v1.4 migration which adds it — or add the line by hand
+5. Start a new conversation after uploading
+
+**Agent refuses with "still contains placeholder values":** You uploaded a template, or a config that was never fully generated. Remove it and run onboarding (`set up`) to generate a real one.
+
+**Agent asks which config is current:** Two or more files in Files carry `"tentacles_config": true`. Remove the stale one.
 
 ---
 
@@ -90,6 +95,6 @@ See [`docs/architecture.md`](architecture.md) for the full date format documenta
 
 **Symptom:** Every new conversation starts with the onboarding flow instead of operating normally.
 
-**Cause:** The config file is missing from Project Knowledge. The agent checks for a `*-config-*.json` file on every session start — if it's not there, it defaults to onboarding mode.
+**Cause:** The config file is missing from the project's Files, or lacks the `"tentacles_config": true` marker. The agent checks for a marked JSON file on every session start — if none is there, it defaults to onboarding mode.
 
-**Fix:** Upload the config JSON to Project Knowledge (Settings → Project Knowledge in your Claude Project). If you don't have the config file anymore, run onboarding once more — it takes about 5 minutes and the agent will regenerate it.
+**Fix:** Upload the config JSON to the project's Files (⚙️ gear icon → Files). If you don't have the config file anymore, run onboarding once more — it takes about 15–30 minutes and the agent will regenerate it.
