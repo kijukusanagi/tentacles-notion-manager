@@ -8,3 +8,4 @@ The build record and reusable process docs for a Tentacles release pass. Each ve
 | [`reflection-protocol.md`](reflection-protocol.md) | R0–R5 self-check protocol for audit runs — untested as of v1.4, first real run planned for cl-1.0 → cl-1.1 (reusable once validated) |
 | [`phase-a-audit.md`](phase-a-audit.md) | Phase A audit report against v1.3 with the approved change list (one-time record) |
 | [`decisions.md`](decisions.md) | Phase A approval and per-section diff-review decisions for the v1.4 build (one-time record) |
+| [`v1.4-fresh-setup-test.md`](v1.4-fresh-setup-test.md) | Fillable timed-run script for the v1.4 release — Record column filled during the run; the template for future release passes (reusable) |
