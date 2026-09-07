@@ -71,3 +71,14 @@ those two points. Provenance unconfirmed; recorded here rather than corrected in
 Final for the v1.4 fresh-setup run: **81,263 bytes / 79,560 characters** (`wc -m`), at 2d6c18f.
 Characters are what count against the Project Instructions limit, so 79,560 is the operative
 figure — roughly 1,700 below the byte count that earlier notes quoted.
+
+## Negative-path test run (checkpoints 0, 14–16) — results and 2 prompt additions
+> "Checkpoint 0: PASS — 79,560 chars accepted in Project Instructions
+> Test 14: PASS — template with marker false silently ignored, Operations Mode entered
+> Test 15: PASS — two marked configs, stopped and asked, no Notion call
+> Test 16: PASS — hand-flipped template refused, placeholders named
+> Not run: checkpoints 1-13 (happy path), 17 (bootstrap). Timed setup run deferred."
+Additions (prompt-only, no schema change), approved:
+1. Startup Config Validation check 4 — UUID-shape check on database_id / data_source / teamspace_id: warn once and continue, do not refuse. Gap found by the v1.4 agent itself during testing (fake-but-not-placeholder IDs pass check 1).
+2. Single-config and placeholder refusals lead with the action (remove file from Files → new conversation / run onboarding), explanation second.
+Blocking unknown (Instructions length) is resolved by checkpoint 0. Tag v1.4 to follow.
