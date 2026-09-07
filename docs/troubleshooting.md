@@ -4,7 +4,7 @@
 
 ## Agent can't find databases
 
-**Symptom:** The agent says it can't find the OS Layer page or can't locate the 8 databases.
+**Symptom:** The agent says it can't find the OS Layer page or can't locate the 8 core databases.
 
 **Cause:** The Notion MCP integration isn't connected, or it's authorized for the wrong workspace.
 

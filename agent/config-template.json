@@ -691,5 +691,30 @@
     },
     "log_effort_on_sessions": true,
     "auto_spawn_tasks": false
+  },
+  "extensions": {
+    "_comment": "Databases you added beyond the core 8. Each entry has the same shape as a core databases.* entry plus role and relations_to_tickets. Onboarding never fills this in — add entries by hand per docs/extending.md, then run 'doctor'. An extension must reach Tickets within 2 hops (relations_to_tickets set, or a relation to a core database that relates to Tickets) or the intake layer can't see it.",
+    "_example_entry": {
+      "key": "meetings",
+      "database_id": "{MEETINGS_DB_ID}",
+      "data_source": "{MEETINGS_DS_ID}",
+      "access": "read_write",
+      "role": "Meeting log. One row per meeting; action items become tickets.",
+      "relations_to_tickets": "Related Meetings",
+      "title_property": "Name",
+      "required_fields": ["Name", "Date"],
+      "optional_fields": ["Attendees", "Notes", "Related Tickets"],
+      "enums": {
+        "Status": ["Scheduled", "Held", "Cancelled"]
+      },
+      "relations": {
+        "Related Tickets": "tickets"
+      },
+      "other_properties": {
+        "Date": "date",
+        "Attendees": "person (multiple)"
+      }
+    },
+    "databases": []
   }
 }
