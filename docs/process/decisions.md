@@ -61,3 +61,13 @@ Notes: B3-only doc files (workflows, agent-patterns, troubleshooting "8" sites) 
 ## Post-handoff — generalization pass, approved
 > "yes go for it!" (in reply to: swap the fork-specific `cl-1.0` example for a neutral one in the prompt's Startup Config Validation and in UPGRADING.md; leave the pre-existing "Quipos"/"OS Layer Next Effect" migration examples and the test-script template split for after the timed run.)
 Rule applied: docs/process/ is the build record and may name forks; everything outside it must read as if the forks don't exist.
+
+## 2026-09-07 — prompt size figures reconciled
+The "80,335 chars" in the B3+B5 approval block above is left as quoted. Note for readers: it
+matches no committed state of `agent/system-prompt.md` on this branch as either a byte or a
+character count — the file goes 78,215 bytes / 76,532 chars at 8989d94 straight to 81,259 /
+79,556 at 93d84c2, so 80,335 was most likely measured on an uncommitted working tree between
+those two points. Provenance unconfirmed; recorded here rather than corrected in place.
+Final for the v1.4 fresh-setup run: **81,263 bytes / 79,560 characters** (`wc -m`), at 2d6c18f.
+Characters are what count against the Project Instructions limit, so 79,560 is the operative
+figure — roughly 1,700 below the byte count that earlier notes quoted.
