@@ -100,5 +100,13 @@ If your filename previously matched `*-config-*.json`, it still works — the na
 
 **Forks:** if your fork carries its own version string (e.g. `myfork-1.0`), add it to the known-version list in the Startup: Config Validation section of your fork's prompt; otherwise the agent will warn once per conversation.
 
+## Upgrading from v1.4 to v1.4.1
+
+v1.4.1 aligns the prompt with the reorganized template landing page and retires the term "OS Layer" in favor of "Management Layer". No schema or config changes — behavioral update only.
+
+### How to upgrade
+1. Replace your system prompt with the v1.4.1 version from `agent/system-prompt.md`
+2. That's it — no migration needed. Existing workspaces keep their current page layout; only fresh duplicates get the new one.
+
 ## Version History
 See CHANGELOG.md for what changed in each version.

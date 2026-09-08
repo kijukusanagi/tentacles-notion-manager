@@ -2,7 +2,7 @@
 
 ## Overview
 
-External Source Migration lets users bring existing Notion data into the Tentacles OS Layer without starting from scratch. The agent scans databases in any teamspace, builds a mapping to the Tentacles schema, and migrates records in user-approved batches — cleanly, with proper project codes, relations, and provenance tracking.
+External Source Migration lets users bring existing Notion data into the Tentacles Management Layer without starting from scratch. The agent scans databases in any teamspace, builds a mapping to the Tentacles schema, and migrates records in user-approved batches — cleanly, with proper project codes, relations, and provenance tracking.
 
 This is not a background sync. It's agent-driven migration: the user asks, the agent scans, proposes a plan, and executes in controlled batches with confirmation at every step.
 
@@ -10,7 +10,7 @@ This is not a background sync. It's agent-driven migration: the user asks, the a
 
 ## Design Principles
 
-1. **Read-only on source.** The agent never modifies, deletes, or annotates anything in the source teamspace. All writes go to the Tentacles OS Layer only.
+1. **Read-only on source.** The agent never modifies, deletes, or annotates anything in the source teamspace. All writes go to the Tentacles Management Layer only.
 
 2. **No noise.** Records don't flood into Tentacles unorganized. Every migrated item gets a project code, a proper status mapping, and lands in the right database. Items that can't be cleanly mapped get flagged for the user — never silently dumped.
 
@@ -49,18 +49,18 @@ Before proceeding to schema inspection, the agent MUST verify the source:
 
 a. For each database found, fetch its page metadata and inspect the **ancestor path** — the chain of parent pages up to the teamspace root.
 
-b. Group all discovered databases by their **top-level parent page**. If all databases share the same parent (e.g., a single "OS Layer" page), present it as the confirmed source. If databases are scattered across multiple parent structures, present each group separately.
+b. Group all discovered databases by their **top-level parent page**. If all databases share the same parent (e.g., a single "Management Layer" page), present it as the confirmed source. If databases are scattered across multiple parent structures, present each group separately.
 
-c. **If multiple OS Layer structures or similarly-named database sets exist in the same teamspace**, present them as distinct source candidates:
+c. **If multiple Management Layer structures or similarly-named database sets exist in the same teamspace**, present them as distinct source candidates:
 
    ```
-   I found multiple database sets in your "Quipos" teamspace:
+   I found multiple database sets in your "Acme Corp" teamspace:
 
-   SOURCE A — Under "OS Layer" (top-level page)
+   SOURCE A — Under "Management Layer" (top-level page)
      Client Database, Active Engagements, Initiatives, Internal Projects,
      Tasks, Tickets, Partnerships, OKRs
 
-   SOURCE B — Under "OS Layer Next Effect" (top-level page)
+   SOURCE B — Under "Management Layer — Legacy" (top-level page)
      Client Database, Active Engagements, Initiatives, Internal Projects,
      Tasks, Tickets, Partnerships, OKRs
 
@@ -74,12 +74,12 @@ e. Once confirmed, record the `source_parent_page_id` — the page ID of the top
 
 4. For each database in the **confirmed source**, fetches the schema: property names, types, select/multi-select options, relations.
 
-5. **Cross-validates relation targets.** For each database's relation properties, verify that the `dataSourceUrl` points to another database within the same confirmed source group — not to a database in a different OS Layer or teamspace. If any relation points outside the source group, flag it: "This database's [relation name] points to a database outside your confirmed source. This may indicate mixed data sources."
+5. **Cross-validates relation targets.** For each database's relation properties, verify that the `dataSourceUrl` points to another database within the same confirmed source group — not to a database in a different Management Layer or teamspace. If any relation points outside the source group, flag it: "This database's [relation name] points to a database outside your confirmed source. This may indicate mixed data sources."
 
 6. Presents an inventory (including the confirmed source parent page name):
 
 ```
-Source: "OS Layer" in your "Quipos" teamspace
+Source: "Management Layer" in your "Acme Corp" teamspace
 
 I found 8 databases:
   1. Client Database — 3 items (has: Name, Status, Value, ...)
@@ -258,7 +258,7 @@ After an initial migration is registered, the user can say "sync" or "pull lates
 ### What Doesn't Sync
 
 - **Deletions** — If a record is deleted from the source, the Tentacles record stays. The agent never deletes data.
-- **Tentacles-native fields** — Project Code, relations to other OS Layer databases, Serialized ID, and other Tentacles-specific fields are never overwritten by source data.
+- **Tentacles-native fields** — Project Code, relations to other Management Layer databases, Serialized ID, and other Tentacles-specific fields are never overwritten by source data.
 - **Conflicts** — If a record was modified in both the source and Tentacles since the last sync, the agent flags it and asks the user which version to keep.
 
 ---
@@ -348,7 +348,7 @@ The config file gets a new top-level `migrations` section:
 |-------|---------|
 | `source_id` | Unique migration identifier (for referencing in conversation) |
 | `source_teamspace_id` | The teamspace being read from — agent uses this to scope queries |
-| `source_parent_page_id` | The verified top-level parent page containing the source databases — prevents reading from the wrong OS Layer in a shared teamspace |
+| `source_parent_page_id` | The verified top-level parent page containing the source databases — prevents reading from the wrong Management Layer in a shared teamspace |
 | `source_parent_page_name` | Human-readable name shown during sync confirmations for at-a-glance source verification |
 | `last_synced_at` | Timestamp of last successful sync — used for incremental queries |
 | `property_mapping` | The approved field mapping — stored so re-syncs use the same rules |
@@ -377,7 +377,7 @@ Add to the existing mode detection logic:
 # MIGRATION MODE
 # ═══════════════════════════════════════════
 
-Migration brings existing Notion data into the OS Layer. It can run during
+Migration brings existing Notion data into the Management Layer. It can run during
 onboarding (as an accelerated setup path) or anytime in operations mode.
 
 ## Safety Rules
@@ -517,7 +517,7 @@ Add to the agent-patterns.md file:
 
 > "Scan my Operations teamspace and bring everything into Tentacles."
 
-The agent discovers all databases in the target teamspace, builds a schema mapping to the OS Layer, and presents a batch migration plan. You review and approve each batch. Records come in with proper project codes, status mappings, and provenance tags.
+The agent discovers all databases in the target teamspace, builds a schema mapping to the Management Layer, and presents a batch migration plan. You review and approve each batch. Records come in with proper project codes, status mappings, and provenance tags.
 
 **When to use:** First setup when you have existing Notion data, or when you've been managing work in a separate teamspace and want to consolidate.
 
@@ -546,7 +546,7 @@ You can adjust mappings after the initial migration. The agent updates the confi
 ## Edge Cases & Error Handling
 
 ### Source Database Has No Clear Tentacles Equivalent
-Present to user with options: "This database doesn't map to any of the 8 OS Layer databases. I can bring items in as tickets (generic intake), skip it entirely, or you can tell me what it should map to."
+Present to user with options: "This database doesn't map to any of the 8 core databases. I can bring items in as tickets (generic intake), skip it entirely, or you can tell me what it should map to."
 
 ### Source Record Missing Required Fields
 If a source record is missing a Tentacles required field (e.g., no title), the agent flags it in the batch preview: "3 records have no title — I'll use their first property value as the title. OK?"
@@ -563,8 +563,8 @@ Before creating any record, the agent checks if a record with the same title alr
 ### Schema Changes in Source
 On incremental sync, if the source database has new properties that weren't in the original mapping, the agent flags them: "The Project Tracker now has a 'Department' property that wasn't there before. Want me to add it to the mapping?"
 
-### Multiple OS Layers in Same Teamspace
-If the target teamspace contains multiple page trees with identical or similar database structures (e.g., "OS Layer" and "OS Layer Next Effect" both containing Client Database, Tasks, Tickets, etc.):
+### Multiple Management Layers in Same Teamspace
+If the target teamspace contains multiple page trees with identical or similar database structures (e.g., "Management Layer" and "Management Layer — Legacy" both containing Client Database, Tasks, Tickets, etc.):
 
 1. The agent MUST present all candidate source groups with their parent page names clearly labeled.
 2. The agent MUST NOT proceed until the user explicitly confirms which source to use.

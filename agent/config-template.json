@@ -1,10 +1,10 @@
 {
   "tentacles_config": false,
   "_comment": "tentacles_config is the mode-detection marker. It is false here because this file is a TEMPLATE with placeholder IDs. The agent sets it to true in the config it generates during onboarding. Never set it to true by hand on a file that still contains {PLACEHOLDER} values.",
-  "version": "1.4",
-  "system_prompt_version": "1.4",
+  "version": "1.4.1",
+  "system_prompt_version": "1.4.1",
   "last_updated": "{DATE}",
-  "changelog": "v1.4: Hardening & extensibility — tentacles_config marker, startup config validation, live-schema-first writes, Config Doctor, extension databases, deferred doc-page updates. No schema changes. v1.3: Added Granular Dives — structured deep work sessions with resumable child databases. v1.2: Added Effort Logging, Proactive Alerting, and Capacity Planning. v1.1: Added External Source Migration. v1.0: Initial setup via Tentacles onboarding agent.",
+  "changelog": "v1.4.1: Template continuity — onboarding finds the landing page by its real title and walks the two-column layout. v1.4: Hardening & extensibility — tentacles_config marker, startup config validation, live-schema-first writes, Config Doctor, extension databases, deferred doc-page updates. No schema changes. v1.3: Added Granular Dives — structured deep work sessions with resumable child databases. v1.2: Added Effort Logging, Proactive Alerting, and Capacity Planning. v1.1: Added External Source Migration. v1.0: Initial setup via Tentacles onboarding agent.",
   "workspace": {
     "name": "{COMPANY_NAME}",
     "os_layer_name": "Tentacles",

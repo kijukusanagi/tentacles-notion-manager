@@ -21,7 +21,7 @@ The upstream repo (`agent/config-template.json`, the hosted template) stays sche
 
 ## How to add a database
 
-1. **Build it in Notion**, inside your Tentacles teamspace, under the OS Layer page. Give it a title property, a `Status` select if you want it in health checks, and — this is the important part — a relation to **Tickets** or to a core database that relates to Tickets (see the 2-hop rule below).
+1. **Build it in Notion**, inside your Tentacles teamspace, on the Tentacles Management Layer page — the **▶ More Databases** toggle under *Company Ops* is the intended spot. Give it a title property, a `Status` select if you want it in health checks, and — this is the important part — a relation to **Tickets** or to a core database that relates to Tickets (see the 2-hop rule below).
 
 2. **Get its IDs.** Open the database as a full page; the URL contains the database ID. Ask the agent: *"What's the data source ID for the {name} database?"* — it can fetch it. Or run `doctor` after step 3 and read the IDs from the drift table.
 
