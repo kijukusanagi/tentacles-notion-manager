@@ -94,3 +94,12 @@ Repo continuity: the hub-page rename had no repo references. The real gap was th
 ## Labels — approved ("YES THAT'S GOOD LETS GO WITH THAT")
 Landing page stays "Tentacles Management Layer". Notion child page "OS Layer — System Map & Reference" → "System Map & Reference". Term "OS Layer" → "Management Layer" in prompt/docs; config key os_layer_name unchanged; onboarding keeps "OS Layer" as a title fallback. Section headings kept (Company Ops / Strategy / CRM / Team Resources and Tools). Migration examples fictionalized ("Quipos" → "Acme Corp", "OS Layer Next Effect" → "Management Layer — Legacy"). Ship as v1.4.1 before the CL audit.
 > "ship it" — v1.4.1 approved: commit, PR, squash-merge, tag v1.4.1, push.
+
+## CL audit (2026-09-08) — correction to a prior about `doctor`, recorded per user instruction
+Prior (user's, and the v1.4 handoff's implicit claim): v1.4's `doctor` would have caught the CL fork's accidentally deleted Tasks database as an UNREACHABLE row.
+Correction (accepted): it would **not**. `doctor` checks reachability of the data sources the *config* names. The CL config already pointed at the replacement Tasks DB (`610b…`), which was reachable, so the check passes. The deleted DB (`93f6…`) was reachable from nowhere in the config — only from live relations (Tickets.Related Tasks on 38 rows, Meetings.Tasks, Internal Projects.Tasks) and four linked views on hub pages. Notion surfaced nothing; the dangling column rendered for ten weeks. Only walking live relation targets (and hub-page view blocks) catches it. The same walk flags a relation whose target lives outside the teamspace (CL's Tickets.Child Databases → a Next Effect test DB).
+Consequence: relation-target checking moves from a v1.5 candidate to a **v1.4.x patch** on the public repo, prompt-only, shipped before the cl-1.1 rebase so the fork inherits it rather than carrying a local version. By the existing convention a behavioral change to the prompt is a version bump with a registry entry; expect v1.4.2 (no schema, no config changes).
+
+## B0 — v1.4.2 doctor relation-target patch (approved with 2 changes)
+> Bound the walk (dedupe across the run, cap 50, name what wasn't walked, never truncate silently). Tighten SHADOW: defined on the target — not the data source the config names for that key — regardless of property name; the name is only a heuristic for finding the key.
+Record correction: v1.4.1 shipped 2026-09-08 (e6ce1bc, PR #2); the user's record had v1.4 only. Base for the CL rebase is v1.4.2.

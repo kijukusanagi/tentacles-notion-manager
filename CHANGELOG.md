@@ -2,6 +2,14 @@
 
 All notable changes to Tentacles will be documented in this file.
 
+## [1.4.2] - 2026-09-08
+### Doctor: relation targets and views
+- `doctor` now walks every relation property on each configured database's live schema and classifies the target: `UNREACHABLE` (deleted/trashed/not shared), `OUTSIDE-TEAMSPACE` (target outside `workspace.teamspace_id`), `SHADOW` (target is not the data source the config names for that key — a replaced database). It also checks linked-database views on the landing page and its direct children (`UNREACHABLE (view)`)
+- Walk is deduped across the run and capped at 50 distinct target fetches; on hitting the cap it names the databases not walked and how to scope a re-run
+- Regeneration explicitly cannot fix these; they need a human edit in Notion
+- Motivated by a production fork where a Tasks database was deleted by accident: the config pointed at its replacement, so v1.4's reachability check passed while 38 tickets, two relations, and four views pointed at nothing for ten weeks
+- Behavioral update only — no schema or config changes
+
 ## [1.4.1] - 2026-09-08
 ### Template Continuity
 - Hosted template landing page reorganized into a two-column layout (Company Ops / Strategy / CRM / Team Resources and Tools) with a *More Databases* toggle for extensions; hub page "Internal Projects" renamed "Internal Project Notes" to stop colliding with the database of the same name

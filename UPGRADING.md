@@ -108,5 +108,14 @@ v1.4.1 aligns the prompt with the reorganized template landing page and retires 
 1. Replace your system prompt with the v1.4.1 version from `agent/system-prompt.md`
 2. That's it — no migration needed. Existing workspaces keep their current page layout; only fresh duplicates get the new one.
 
+## Upgrading from v1.4.1 to v1.4.2
+
+v1.4.2 extends `doctor` to walk live relation targets and hub-page views. No schema or config changes — behavioral update only.
+
+### How to upgrade
+1. Replace your system prompt with the v1.4.2 version from `agent/system-prompt.md`
+2. No migration needed
+3. Say `doctor` once — the new checks (`UNREACHABLE`, `OUTSIDE-TEAMSPACE`, `SHADOW`, `UNREACHABLE (view)`) may surface drift that existed all along, and none of it can be fixed by regenerating the config; it needs a human edit in Notion
+
 ## Version History
 See CHANGELOG.md for what changed in each version.
