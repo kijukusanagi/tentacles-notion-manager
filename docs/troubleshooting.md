@@ -4,7 +4,7 @@
 
 ## Agent can't find databases
 
-**Symptom:** The agent says it can't find the OS Layer page or can't locate the 8 core databases.
+**Symptom:** The agent says it can't find the Tentacles Management Layer page (the template's landing page) or can't locate the 8 core databases.
 
 **Cause:** The Notion MCP integration isn't connected, or it's authorized for the wrong workspace.
 
@@ -45,11 +45,11 @@
 
 **Symptom:** Tickets or pages are appearing in the wrong Notion teamspace.
 
-**Cause:** You have multiple teamspaces and the agent found an "OS Layer" page in a different one.
+**Cause:** You have multiple teamspaces and the agent found a Tentacles landing page in a different one.
 
 **Fix:**
 1. Type `reconfigure` to restart onboarding
-2. When the agent finds multiple OS Layer pages, it will ask which teamspace to use — specify the correct one
+2. When the agent finds multiple landing pages, it will ask which teamspace to use — specify the correct one
 3. The agent will scope all subsequent operations to that teamspace only
 
 ---

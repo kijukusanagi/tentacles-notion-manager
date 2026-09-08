@@ -85,3 +85,12 @@ Blocking unknown (Instructions length) is resolved by checkpoint 0. Tag v1.4 to 
 
 ## Release gate
 > "re-paste passed" — 80,490 characters accepted in Project Instructions. Approved: PR v1.4-hardening → main, squash-merge, annotated tag v1.4 on main at the merge commit (no prior tags exist; format chosen to match prompt header and commit prefixes), push tag, delete remote branch, keep local.
+
+## Post-release — hosted template landing page + v1.4.1 (2026-09-08)
+> "in the original main directory page it was more of just a list instead of a more organized set of options. Can you please make sure when the person downloads the notion template it's like this image" / "Ok let's rename these so they're more clear" / "based on the name changes please make sure every other part of the project that had the previous names are updated so there's continuity"
+Template changes (hosted, page 3276026675c5817f9668eb0c557689fe): two-column layout — Company Ops (orange) / Strategy (blue) / CRM / Team Resources and Tools, "More Databases" toggle for extensions, task views kept underneath. Hub page "Internal Projects" → "Internal Project Notes". All 14 children re-verified by re-fetch: same URLs, same data sources. Zero schema changes.
+Repo continuity: the hub-page rename had no repo references. The real gap was the prompt searching for a page titled "OS Layer" when the landing page is "Tentacles Management Layer" → v1.4.1 (behavioral only): onboarding searches the real title with "OS Layer" fallback and walks the column layout; registry v1.4 → v1.4.1 entry; troubleshooting/extending/architecture/CHANGELOG/UPGRADING aligned. TEMPLATE_LINK.md left untouched per the original do-not-touch rule (its "Hub pages" bullet is now slightly stale — flagged).
+
+## Labels — approved ("YES THAT'S GOOD LETS GO WITH THAT")
+Landing page stays "Tentacles Management Layer". Notion child page "OS Layer — System Map & Reference" → "System Map & Reference". Term "OS Layer" → "Management Layer" in prompt/docs; config key os_layer_name unchanged; onboarding keeps "OS Layer" as a title fallback. Section headings kept (Company Ops / Strategy / CRM / Team Resources and Tools). Migration examples fictionalized ("Quipos" → "Acme Corp", "OS Layer Next Effect" → "Management Layer — Legacy"). Ship as v1.4.1 before the CL audit.
+> "ship it" — v1.4.1 approved: commit, PR, squash-merge, tag v1.4.1, push.

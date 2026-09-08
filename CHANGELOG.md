@@ -2,6 +2,13 @@
 
 All notable changes to Tentacles will be documented in this file.
 
+## [1.4.1] - 2026-09-08
+### Template Continuity
+- Hosted template landing page reorganized into a two-column layout (Company Ops / Strategy / CRM / Team Resources and Tools) with a *More Databases* toggle for extensions; hub page "Internal Projects" renamed "Internal Project Notes" to stop colliding with the database of the same name
+- Onboarding finds the landing page by its real title ("Tentacles Management Layer", falling back to "OS Layer") and walks the column layout; previously it searched for "OS Layer", which only matches the System Map child page
+- Labels: the child page "OS Layer — System Map & Reference" renamed "System Map & Reference"; the term "OS Layer" replaced by "Management Layer" throughout the prompt and docs (the config key `os_layer_name` is unchanged)
+- Behavioral update only — no schema or config changes
+
 ## [1.4] - 2026-09-07
 ### Hardening & Extensibility
 - Mode detection keys on a `"tentacles_config": true` marker instead of a filename glob; templates and examples carry `false`

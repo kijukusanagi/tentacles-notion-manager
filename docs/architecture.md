@@ -2,9 +2,13 @@
 
 ## Overview
 
-Tentacles is a set of interconnected Notion databases plus a Claude AI agent. The base template ships 8 core databases; the agent operates on whatever the config lists, including any you add (see [`extending.md`](extending.md)). The databases form the "OS Layer" — a structured backbone for tracking work from strategy to execution. The agent reads and writes to all configured databases via Notion's MCP integration, using a config file stored in Claude Project Knowledge to operate without re-discovering the workspace on every session.
+Tentacles is a set of interconnected Notion databases plus a Claude AI agent. The base template ships 8 core databases; the agent operates on whatever the config lists, including any you add (see [`extending.md`](extending.md)). The databases form the "Management Layer" — a structured backbone for tracking work from strategy to execution. The agent reads and writes to all configured databases via Notion's MCP integration, using a config file stored in Claude Project Knowledge to operate without re-discovering the workspace on every session.
 
 ---
+
+## The Landing Page
+
+The template's top page is **🐙 Tentacles Management Layer**. It is laid out in two columns: **Company Ops** (Company Dashboard, Tickets, Tasks, Internal Projects, plus a *More Databases* toggle for your own additions), **Strategy** (Initiatives, OKRs & KPIs, System Map & Reference), **CRM** (Client Database, Active Engagements, Partnerships), and **Team Resources and Tools** (Knowledge Base, Internal Project Notes, Team Working Docs, Finished Projects), with the My Tasks / Overdue Tasks / Sprint Overview views underneath. The page *System Map & Reference* is a reference doc, not where the databases live.
 
 ## The 8 Core Databases
 

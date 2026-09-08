@@ -112,7 +112,7 @@ The agent updates task sprint assignments, logs completion dates, moves incomple
 
 > "Scan my Operations teamspace and bring everything into Tentacles."
 
-The agent discovers all databases in the target teamspace, inspects their schemas, and builds a mapping to the OS Layer. It presents a batch migration plan ordered by dependency (clients first, then engagements, then tickets, then tasks). You review and approve each batch before anything gets created. Every migrated record gets a provenance tag so you know where it came from.
+The agent discovers all databases in the target teamspace, inspects their schemas, and builds a mapping to the Management Layer. It presents a batch migration plan ordered by dependency (clients first, then engagements, then tickets, then tasks). You review and approve each batch before anything gets created. Every migrated record gets a provenance tag so you know where it came from.
 
 **When to use:** First setup when you have existing Notion data, or when you've been managing work in a separate teamspace and want to consolidate.
 
