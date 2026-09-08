@@ -103,3 +103,4 @@ Consequence: relation-target checking moves from a v1.5 candidate to a **v1.4.x 
 ## B0 — v1.4.2 doctor relation-target patch (approved with 2 changes)
 > Bound the walk (dedupe across the run, cap 50, name what wasn't walked, never truncate silently). Tighten SHADOW: defined on the target — not the data source the config names for that key — regardless of property name; the name is only a heuristic for finding the key.
 Record correction: v1.4.1 shipped 2026-09-08 (e6ce1bc, PR #2); the user's record had v1.4 only. Base for the CL rebase is v1.4.2.
+> "yes it works" — v1.4.2 prompt (85,470 chars / 87,241 bytes) re-pasted into Project Instructions from the branch before merge and accepted. Approved: PR, squash-merge, tag v1.4.2, push.
